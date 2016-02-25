@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using TgMsgSharp.Connector;
+using TgMsgSharp.Launcher.Properties;
 
 namespace TgMsgSharp.Launcher
 {
@@ -15,7 +16,14 @@ namespace TgMsgSharp.Launcher
 
         readonly Lazy<TgConnector> _tgConnector;
 
-        TgConnector CreateConnector() => new TgConnector(txtNumber.Text, string.Empty, int.Parse(txtAppId.Text), txtAppHash.Text);
+        TgConnector CreateConnector()
+        {
+            var tgConnector = new TgConnector(txtNumber.Text, string.Empty, int.Parse(txtAppId.Text), txtAppHash.Text);
+
+            tgConnector.StatusChanged += (_, status) => UpdateStatus(status);
+
+            return tgConnector;
+        }
 
         public Viewer()
         {
@@ -27,6 +35,8 @@ namespace TgMsgSharp.Launcher
         void PopulateSettings(ITgSettingsProvider settingsProvider)
         {
             var settings = settingsProvider.GetSettings();
+
+            if (settings == null) return;
 
             txtNumber.Text = settings.Number;
             txtAppId.Text = settings.AppId.ToString();
@@ -106,11 +116,9 @@ namespace TgMsgSharp.Launcher
 
         void Viewer_Load(object sender, EventArgs e)
         {
-            PopulateSettings(new TgFileSettingsProvider(new FileInfo(@"..\..\..\..\TODO\AppData.csv")));
+            PopulateSettings(new TgFileSettingsProvider(new FileInfo(Settings.Default.TgSettingsPath)));
 
-            UpdateStatus(_tgConnector.Value.Status);
-
-            _tgConnector.Value.StatusChanged += (_, status) => UpdateStatus(status);
+            UpdateStatus(ConnectorStatus.NotConnected);
         }
 
         void UpdateStatus(ConnectorStatus status)
