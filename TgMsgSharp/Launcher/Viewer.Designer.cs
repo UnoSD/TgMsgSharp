@@ -42,13 +42,17 @@
             this.chrSurname = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chrNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lblGetMessages = new System.Windows.Forms.Label();
+            this.btnLoad = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.txtSettingsFile = new System.Windows.Forms.TextBox();
+            this.btnBrowse = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.SuspendLayout();
             // 
             // btnConnect
             // 
             this.btnConnect.Enabled = false;
-            this.btnConnect.Location = new System.Drawing.Point(12, 90);
+            this.btnConnect.Location = new System.Drawing.Point(12, 119);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(100, 23);
             this.btnConnect.TabIndex = 0;
@@ -59,7 +63,7 @@
             // txtCode
             // 
             this.txtCode.Enabled = false;
-            this.txtCode.Location = new System.Drawing.Point(12, 119);
+            this.txtCode.Location = new System.Drawing.Point(12, 148);
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(100, 20);
             this.txtCode.TabIndex = 1;
@@ -68,7 +72,7 @@
             // btnAuth
             // 
             this.btnAuth.Enabled = false;
-            this.btnAuth.Location = new System.Drawing.Point(12, 145);
+            this.btnAuth.Location = new System.Drawing.Point(12, 174);
             this.btnAuth.Name = "btnAuth";
             this.btnAuth.Size = new System.Drawing.Size(100, 23);
             this.btnAuth.TabIndex = 0;
@@ -79,7 +83,7 @@
             // txtRecipient
             // 
             this.txtRecipient.Enabled = false;
-            this.txtRecipient.Location = new System.Drawing.Point(12, 200);
+            this.txtRecipient.Location = new System.Drawing.Point(12, 229);
             this.txtRecipient.Name = "txtRecipient";
             this.txtRecipient.Size = new System.Drawing.Size(100, 20);
             this.txtRecipient.TabIndex = 2;
@@ -88,7 +92,7 @@
             // txtDownload
             // 
             this.txtDownload.Enabled = false;
-            this.txtDownload.Location = new System.Drawing.Point(12, 226);
+            this.txtDownload.Location = new System.Drawing.Point(12, 255);
             this.txtDownload.Name = "txtDownload";
             this.txtDownload.Size = new System.Drawing.Size(100, 23);
             this.txtDownload.TabIndex = 0;
@@ -99,7 +103,7 @@
             // txtNumber
             // 
             this.txtNumber.Enabled = false;
-            this.txtNumber.Location = new System.Drawing.Point(12, 64);
+            this.txtNumber.Location = new System.Drawing.Point(12, 93);
             this.txtNumber.Name = "txtNumber";
             this.txtNumber.Size = new System.Drawing.Size(100, 20);
             this.txtNumber.TabIndex = 1;
@@ -108,7 +112,7 @@
             // txtAppHash
             // 
             this.txtAppHash.Enabled = false;
-            this.txtAppHash.Location = new System.Drawing.Point(12, 38);
+            this.txtAppHash.Location = new System.Drawing.Point(12, 67);
             this.txtAppHash.Name = "txtAppHash";
             this.txtAppHash.Size = new System.Drawing.Size(100, 20);
             this.txtAppHash.TabIndex = 1;
@@ -117,7 +121,7 @@
             // txtAppId
             // 
             this.txtAppId.Enabled = false;
-            this.txtAppId.Location = new System.Drawing.Point(12, 12);
+            this.txtAppId.Location = new System.Drawing.Point(12, 41);
             this.txtAppId.Name = "txtAppId";
             this.txtAppId.Size = new System.Drawing.Size(100, 20);
             this.txtAppId.TabIndex = 1;
@@ -129,7 +133,7 @@
             this.dgvData.Enabled = false;
             this.dgvData.Location = new System.Drawing.Point(337, 11);
             this.dgvData.Name = "dgvData";
-            this.dgvData.Size = new System.Drawing.Size(830, 237);
+            this.dgvData.Size = new System.Drawing.Size(830, 267);
             this.dgvData.TabIndex = 3;
             // 
             // lvwContacts
@@ -141,7 +145,7 @@
             this.lvwContacts.FullRowSelect = true;
             this.lvwContacts.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lvwContacts.HideSelection = false;
-            this.lvwContacts.Location = new System.Drawing.Point(118, 12);
+            this.lvwContacts.Location = new System.Drawing.Point(118, 41);
             this.lvwContacts.MultiSelect = false;
             this.lvwContacts.Name = "lvwContacts";
             this.lvwContacts.Size = new System.Drawing.Size(213, 237);
@@ -165,17 +169,59 @@
             // lblGetMessages
             // 
             this.lblGetMessages.AutoSize = true;
-            this.lblGetMessages.Location = new System.Drawing.Point(11, 178);
+            this.lblGetMessages.Location = new System.Drawing.Point(11, 207);
             this.lblGetMessages.Name = "lblGetMessages";
             this.lblGetMessages.Size = new System.Drawing.Size(77, 13);
             this.lblGetMessages.TabIndex = 5;
             this.lblGetMessages.Text = "Get messages:";
             // 
+            // btnLoad
+            // 
+            this.btnLoad.Location = new System.Drawing.Point(175, 11);
+            this.btnLoad.Name = "btnLoad";
+            this.btnLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnLoad.TabIndex = 6;
+            this.btnLoad.Text = "Load";
+            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(256, 11);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 6;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // txtSettingsFile
+            // 
+            this.txtSettingsFile.Location = new System.Drawing.Point(14, 13);
+            this.txtSettingsFile.Name = "txtSettingsFile";
+            this.txtSettingsFile.Size = new System.Drawing.Size(122, 20);
+            this.txtSettingsFile.TabIndex = 7;
+            this.txtSettingsFile.TextChanged += new System.EventHandler(this.txtSettingsFile_TextChanged);
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Location = new System.Drawing.Point(142, 11);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(27, 23);
+            this.btnBrowse.TabIndex = 8;
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
             // Viewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1179, 260);
+            this.ClientSize = new System.Drawing.Size(1179, 290);
+            this.Controls.Add(this.btnBrowse);
+            this.Controls.Add(this.txtSettingsFile);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.lblGetMessages);
             this.Controls.Add(this.lvwContacts);
             this.Controls.Add(this.dgvData);
@@ -212,6 +258,10 @@
         private System.Windows.Forms.ColumnHeader chrSurname;
         private System.Windows.Forms.ColumnHeader chrNumber;
         private System.Windows.Forms.Label lblGetMessages;
+        private System.Windows.Forms.Button btnLoad;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.TextBox txtSettingsFile;
+        private System.Windows.Forms.Button btnBrowse;
     }
 }
 

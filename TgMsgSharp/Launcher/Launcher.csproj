@@ -48,6 +48,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SettingsSaver.cs" />
     <Compile Include="TgContact.cs" />
     <Compile Include="TgFileSettingsProvider.cs" />
     <Compile Include="TgSettings.cs" />

@@ -15,6 +15,7 @@ namespace TgMsgSharp.Launcher
         const string SurnameColumn = "Surname";
 
         readonly Lazy<TgConnector> _tgConnector;
+        readonly Lazy<SettingsSaver> _tgSettingsSaver;
 
         TgConnector CreateConnector()
         {
@@ -30,6 +31,7 @@ namespace TgMsgSharp.Launcher
             InitializeComponent();
 
             _tgConnector = new Lazy<TgConnector>(CreateConnector);
+            _tgSettingsSaver = new Lazy<SettingsSaver>();
         }
 
         void PopulateSettings(ITgSettingsProvider settingsProvider)
@@ -48,7 +50,7 @@ namespace TgMsgSharp.Launcher
         void PopulateContacts(IEnumerable<TgContact> contacts)
         {
             Func<TgContact, ListViewItem> mapperSelector =
-                contact => new ListViewItem(new[] {contact.FirstName, contact.LastName, contact.Number});
+                contact => new ListViewItem(new[] { contact.FirstName, contact.LastName, contact.Number });
 
             var listViewItems = contacts.Select(mapperSelector).ToArray();
 
@@ -61,7 +63,7 @@ namespace TgMsgSharp.Launcher
         {
             var connect = await _tgConnector.Value.Connect();
 
-            if(connect == ConnectorStatus.ValidationCodeNeeded)
+            if (connect == ConnectorStatus.ValidationCodeNeeded)
                 MessageBox.Show("Code sent.");
         }
 
@@ -116,7 +118,11 @@ namespace TgMsgSharp.Launcher
 
         void Viewer_Load(object sender, EventArgs e)
         {
-            PopulateSettings(new TgFileSettingsProvider(new FileInfo(Settings.Default.TgSettingsPath)));
+            var tgSettingsPath = Settings.Default.TgSettingsPath;
+
+            txtSettingsFile.Text = tgSettingsPath;
+
+            PopulateSettings(new TgFileSettingsProvider(new FileInfo(tgSettingsPath)));
 
             UpdateStatus(ConnectorStatus.NotConnected);
         }
@@ -125,6 +131,11 @@ namespace TgMsgSharp.Launcher
         {
             foreach (var control in Controls.OfType<Control>())
                 control.Enabled = false;
+
+            txtSettingsFile.Enabled = true;
+            btnBrowse.Enabled = true;
+            btnLoad.Enabled = true;
+            btnSave.Enabled = true;
 
             switch (status)
             {
@@ -163,5 +174,54 @@ namespace TgMsgSharp.Launcher
         }
 
         int GetColumnIndex(string columnName) => lvwContacts.Columns.OfType<ColumnHeader>().Single(header => header.Text == columnName).Index;
+
+        void btnBrowse_Click(object sender, EventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog();
+
+            var dialogResult = saveFileDialog.ShowDialog();
+
+            if (dialogResult != DialogResult.OK) return;
+
+            txtSettingsFile.Text = saveFileDialog.FileName;
+        }
+
+        void btnLoad_Click(object sender, EventArgs e)
+        {
+            var tgFileSettingsProvider = new TgFileSettingsProvider(new FileInfo(txtSettingsFile.Text));
+
+            PopulateSettings(tgFileSettingsProvider);
+        }
+
+        void btnSave_Click(object sender, EventArgs e)
+        {
+            Func<ListViewItem, TgContact> selector = item => new TgContact
+            {
+                Number = item.SubItems[GetColumnIndex(NumberColumn)].Text,
+                FirstName = item.SubItems[GetColumnIndex(NameColumn)].Text,
+                LastName = item.SubItems[GetColumnIndex(SurnameColumn)].Text
+            };
+
+            var contacts = lvwContacts.Items.OfType<ListViewItem>().Select(selector).ToList();
+
+            var tgSettings = new TgSettings
+            {
+                AppId = int.Parse(txtAppId.Text),
+                AppHash = txtAppHash.Text,
+                Number = txtNumber.Text,
+                Contacts = contacts
+            };
+
+            _tgSettingsSaver.Value.Save(tgSettings, new FileInfo(txtSettingsFile.Text));
+
+            MessageBox.Show("Saved!");
+        }
+
+        private void txtSettingsFile_TextChanged(object sender, EventArgs e)
+        {
+            Settings.Default.TgSettingsPath = txtSettingsFile.Text;
+
+            Settings.Default.Save();
+        }
     }
 }

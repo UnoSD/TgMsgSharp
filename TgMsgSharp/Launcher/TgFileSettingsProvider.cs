@@ -30,6 +30,11 @@ namespace TgMsgSharp.Launcher
                 Number = data[5]
             };
 
+            if (data.Length < 12)
+                return tgSettings;
+
+            // Support any numer of contacts.
+
             tgSettings.Contacts.Add(new TgContact
             {
                 Number = data[6],
