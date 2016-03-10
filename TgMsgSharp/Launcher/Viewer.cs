@@ -96,6 +96,8 @@ namespace TgMsgSharp.Launcher
         {
             var dataSource = messages.OrderBy(message => message.Date).ToArray();
 
+
+
             Text = $"{number} {name ?? string.Empty} {surname ?? string.Empty} {dataSource.Length}";
 
             dgvData.Enabled = true;

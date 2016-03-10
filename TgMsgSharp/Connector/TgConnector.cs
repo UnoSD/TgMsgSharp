@@ -104,6 +104,8 @@ namespace TgMsgSharp.Connector
             var offset = 0;
             List<Message> messages;
 
+            var stuck = 100;
+
             while ((messages = await _client.GetMessagesHistoryForContact(contactId, offset, int.MaxValue))?.Count > 0 || _retryGetMessages > 0)
             {
                 // Sometimes it returns null even if other messages are available, so we have to retry.
@@ -112,6 +114,12 @@ namespace TgMsgSharp.Connector
                     _retryGetMessages--;
                     continue;
                 }
+
+                var c = returnValue.Select(message => message.Date).Distinct().Count();
+                var d = returnValue.OrderBy(message => message.Date).First();
+
+                if (messages.Any())
+                    stuck = 100;
 
                 //var firstOrDefault = messages.FirstOrDefault(message => returnValue.Select(tgMessage => tgMessage.MsgId).Contains(message.from_id));
                 //if (firstOrDefault != null) // Message already in list.
@@ -124,7 +132,24 @@ namespace TgMsgSharp.Connector
                 // Not really elegant, but a way to deduce approximately wheather the messages are really over
                 // as it will return null both when the fetching is failed and when the messages are over.
                 // Waiting for a MessagesCount/NoMessagesResult from the TLSharp team...
-                if (messages.Count < 100) break;
+                if (messages.Count < 100) // bool firstTimeStuck = true, then retry once first.
+                {
+                    // Sometimes (maybe always) it gets stuck on a video or audio message, let's skip it and see if there are other messages.
+                    if (stuck > 0)
+                    {
+                        stuck -= 1;
+                        offset += 1;
+                        returnValue.Add(new TgMessage
+                        {
+                            Text = "MAYBE MESSAGE MISSING, CHECK.",
+                            Date = returnValue.Last().Date.Subtract(TimeSpan.FromMilliseconds(1)),
+                            MsgId = returnValue.Last().MsgId - 1
+                        });
+                        continue;
+                    }
+
+                    break;
+                }
             }
 
             return returnValue;
