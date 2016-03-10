@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectorStatus.cs" />
+    <Compile Include="MessagesProcessor.cs" />
     <Compile Include="TgDateConverter.cs" />
     <Compile Include="TgMessage.cs" />
     <Compile Include="TgConnector.cs" />

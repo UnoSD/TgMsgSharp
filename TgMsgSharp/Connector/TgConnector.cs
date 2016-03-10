@@ -97,59 +97,19 @@ namespace TgMsgSharp.Connector
             return await GetMessagesForContactId(contactId.Value);
         }
 
-        async Task<IEnumerable<TgMessage>> GetMessagesForContactId(int contactId)
+        async Task<IReadOnlyCollection<TgMessage>> GetMessagesForContactId(int contactId)
         {
             var returnValue = new List<TgMessage>();
 
-            var offset = 0;
-            List<Message> messages;
+            var messagesProcessor = new MessagesProcessor(_client, contactId);
 
-            var stuck = 100;
-
-            while ((messages = await _client.GetMessagesHistoryForContact(contactId, offset, int.MaxValue))?.Count > 0 || _retryGetMessages > 0)
+            while (await messagesProcessor.GetMessagesAvailable())
             {
-                // Sometimes it returns null even if other messages are available, so we have to retry.
-                if (messages == null)
-                {
-                    _retryGetMessages--;
-                    continue;
-                }
+                var messages = await messagesProcessor.GetMessages();
 
-                var c = returnValue.Select(message => message.Date).Distinct().Count();
-                var d = returnValue.OrderBy(message => message.Date).First();
+                var tgMessages = MapMessages(messages);
 
-                if (messages.Any())
-                    stuck = 100;
-
-                //var firstOrDefault = messages.FirstOrDefault(message => returnValue.Select(tgMessage => tgMessage.MsgId).Contains(message.from_id));
-                //if (firstOrDefault != null) // Message already in list.
-                //Debugger.Break();
-
-                returnValue.AddRange(MapMessages(messages));
-
-                offset += messages.Count;
-
-                // Not really elegant, but a way to deduce approximately wheather the messages are really over
-                // as it will return null both when the fetching is failed and when the messages are over.
-                // Waiting for a MessagesCount/NoMessagesResult from the TLSharp team...
-                if (messages.Count < 100) // bool firstTimeStuck = true, then retry once first.
-                {
-                    // Sometimes (maybe always) it gets stuck on a video or audio message, let's skip it and see if there are other messages.
-                    if (stuck > 0)
-                    {
-                        stuck -= 1;
-                        offset += 1;
-                        returnValue.Add(new TgMessage
-                        {
-                            Text = "MAYBE MESSAGE MISSING, CHECK.",
-                            Date = returnValue.Last().Date.Subtract(TimeSpan.FromMilliseconds(1)),
-                            MsgId = returnValue.Last().MsgId - 1
-                        });
-                        continue;
-                    }
-
-                    break;
-                }
+                returnValue.AddRange(tgMessages);
             }
 
             return returnValue;
@@ -157,9 +117,21 @@ namespace TgMsgSharp.Connector
 
         static IEnumerable<TgMessage> MapMessages(IEnumerable<Message> messages)
         {
+
+            /*
+                //message#567699b3 flags:int id:int from_id:int to_id:Peer date:int message:string media:MessageMedia = Message;
+
+                message.id is actually message.flags I believe:
+
+                flags 	int 	Flag mask for the message:
+                flags & 0x1 - message is unread (moved here from unread)
+                flags & 0x2 - message was sent by the current user (moved here from out)
+                Parameter was added in Layer 17.
+            */
+
             return messages.OfType<MessageConstructor>().Select(message => new TgMessage
             {
-                MsgType = message.id,
+                //MsgType = message.id,
                 SenderId = message.to_id,
                 MsgId = message.from_id,
                 Date = TgDateConverter.GetDateTime(message.date),

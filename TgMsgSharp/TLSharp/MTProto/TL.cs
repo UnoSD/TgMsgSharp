@@ -5277,7 +5277,9 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.id = reader.ReadInt32();
+            //message#567699b3 flags:int id:int from_id:int to_id:Peer date:int message:string media:MessageMedia = Message;
+
+            this.id = reader.ReadInt32();
 			this.from_id = reader.ReadInt32();
 			this.to_id = reader.ReadInt32();
 			this.output = reader.ReadUInt32() == 0x997275b5;
