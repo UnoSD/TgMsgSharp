@@ -103,11 +103,9 @@ namespace TgMsgSharp.Launcher
 
         void PopulateMessagesList(string number, string name, string surname, IEnumerable<TgMessage> messages)
         {
-            var dataSource = messages.OrderBy(message => message.Date).ToArray();
+            var dataSource = new SortableBindingList<TgMessage>(messages.OrderBy(message => message.Date).ToList());
 
-
-
-            Text = $"{number} {name ?? string.Empty} {surname ?? string.Empty} {dataSource.Length}";
+            Text = $"{number} {name ?? string.Empty} {surname ?? string.Empty} {dataSource.Count}";
 
             dgvData.Enabled = true;
 
