@@ -5227,77 +5227,7 @@ namespace TLSharp.Core.MTProto
 	}
 
 
-	public class MessageConstructor : Message
-	{
-		public int id;
-		public int from_id;
-		public int to_id;
-		public bool output;
-		public bool unread;
-		public int date;
-		public string message;
-		public MessageMedia media;
-
-		public MessageConstructor()
-		{
-
-		}
-
-		public MessageConstructor(int id, int from_id, int to_id, bool output, bool unread, int date, string message,
-			MessageMedia media)
-		{
-			this.id = id;
-			this.from_id = from_id;
-			this.to_id = to_id;
-			this.output = output;
-			this.unread = unread;
-			this.date = date;
-			this.message = message;
-			this.media = media;
-		}
-
-
-		public override Constructor Constructor
-		{
-			get { return Constructor.message; }
-		}
-
-		public override void Write(BinaryWriter writer)
-		{
-			writer.Write(0x22eb6aba);
-			writer.Write(this.id);
-			writer.Write(this.from_id);
-			writer.Write(this.to_id);
-			writer.Write(this.output ? 0x997275b5 : 0xbc799737);
-			writer.Write(this.unread ? 0x997275b5 : 0xbc799737);
-			writer.Write(this.date);
-			Serializers.String.write(writer, this.message);
-			this.media.Write(writer);
-		}
-
-		public override void Read(BinaryReader reader)
-		{
-            //message#567699b3 flags:int id:int from_id:int to_id:Peer date:int message:string media:MessageMedia = Message;
-
-            this.id = reader.ReadInt32();
-			this.from_id = reader.ReadInt32();
-			this.to_id = reader.ReadInt32();
-			this.output = reader.ReadUInt32() == 0x997275b5;
-			this.unread = reader.ReadUInt32() == 0x997275b5;
-			this.date = reader.ReadInt32();
-			this.message = Serializers.String.read(reader);
-			this.media = TL.Parse<MessageMedia>(reader);
-		}
-
-		public override string ToString()
-		{
-			return String.Format("(message id:{0} from_id:{1} to_id:{2} out:{3} unread:{4} date:{5} message:'{6}' media:{7})", id,
-				from_id, to_id, output, unread, date, message, media);
-		}
-	}
-
-
-	public class MessageForwardedConstructor : Message
+    public class MessageForwardedConstructor : Message
 	{
 		public int id;
 		public int fwd_from_id;
@@ -8774,9 +8704,9 @@ namespace TLSharp.Core.MTProto
 			this.pts = reader.ReadInt32();
 			this.seq = reader.ReadInt32();
 			*/
-		}
+        }
 
-		public override string ToString()
+        public override string ToString()
 		{
 			return String.Format("(messages_statedMessage message:{0} chats:{1} users:{2} pts:{3} seq:{4})", message,
 				Serializers.VectorToString(chats), Serializers.VectorToString(users), pts, seq);

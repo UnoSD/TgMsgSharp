@@ -131,11 +131,13 @@ namespace TgMsgSharp.Connector
 
             return messages.OfType<MessageConstructor>().Select(message => new TgMessage
             {
-                //MsgType = message.id,
-                SenderId = message.to_id,
-                MsgId = message.from_id,
+                Flags = message.flags.ToString(),
+                SenderId = message.from_id,
+                ReceiverId = message.to_id,
+                MsgId = message.id,
                 Date = TgDateConverter.GetDateTime(message.date),
                 Text = message.message,
+                ContentType = message.media.ToString(),
                 Unread = message.unread
             });
 

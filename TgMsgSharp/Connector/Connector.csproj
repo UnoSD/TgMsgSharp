@@ -45,6 +45,7 @@
     <Compile Include="TgMessage.cs" />
     <Compile Include="TgConnector.cs" />
     <Compile Include="SerializedSingleSessionStore.cs" />
+    <Compile Include="TlParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

@@ -56,6 +56,7 @@
     <Compile Include="MTProto\Crypto\MD5Digest.cs" />
     <Compile Include="MTProto\Crypto\RSA.cs" />
     <Compile Include="MTProto\Crypto\Salt.cs" />
+    <Compile Include="MTProto\MessageConstructor.cs" />
     <Compile Include="MTProto\Serializers.cs" />
     <Compile Include="MTProto\TL.cs" />
     <Compile Include="Network\MtProtoPlainSender.cs" />
