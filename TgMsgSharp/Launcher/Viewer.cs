@@ -87,9 +87,18 @@ namespace TgMsgSharp.Launcher
             var name = GetValueFromList(NameColumn);
             var surname = GetValueFromList(SurnameColumn);
 
+            SetWorkInProgress(true);
+
             var messages = (await _tgConnector.Value.GetMessages(number, name ?? "My Test Name", surname ?? string.Empty)).ToArray();
 
+            SetWorkInProgress(false);
+
             PopulateMessagesList(number, name, surname, messages);
+        }
+
+        void SetWorkInProgress(bool status)
+        {
+            this.UseWaitCursor = status;
         }
 
         void PopulateMessagesList(string number, string name, string surname, IEnumerable<TgMessage> messages)

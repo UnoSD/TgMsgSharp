@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using Ionic.Zlib;
 using TLSharp.Core.MTProto;
 
 namespace TLSharp.Core.Requests
@@ -40,7 +41,17 @@ namespace TLSharp.Core.Requests
 		    //if (constructor != typeof (ConfigConstructor) )
 		    if (constructor == typeof (Messages_messagesSliceConstructor) )
 		    {
-		        var readBytes = reader.ReadBytes((int)reader.BaseStream.Length);
+		        var gzipStream = reader.BaseStream as GZipStream;
+
+		        var memoryStream = reader.BaseStream as MemoryStream;
+
+                if(gzipStream == null && memoryStream == null)
+                    Debugger.Break();
+
+		        // ReSharper disable once PossibleNullReferenceException
+		        var count = gzipStream?.BufferSize ?? memoryStream.Length;
+
+		        var readBytes = reader.ReadBytes((int)count);
                 
                 throw new Exception("Error obtaining configuration.");
                 //while(true) reader
