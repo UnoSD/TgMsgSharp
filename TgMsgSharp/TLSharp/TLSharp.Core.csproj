@@ -56,9 +56,17 @@
     <Compile Include="MTProto\Crypto\MD5Digest.cs" />
     <Compile Include="MTProto\Crypto\RSA.cs" />
     <Compile Include="MTProto\Crypto\Salt.cs" />
+    <Compile Include="MTProto\IntegerExtensions.cs" />
+    <Compile Include="MTProto\ITlObjectReader.cs" />
     <Compile Include="MTProto\MessageConstructor.cs" />
+    <Compile Include="MTProto\MessageConstructorMethods.cs" />
+    <Compile Include="MTProto\MessageFlag.cs" />
+    <Compile Include="MTProto\TlPropertyAttribute.cs" />
     <Compile Include="MTProto\Serializers.cs" />
     <Compile Include="MTProto\TL.cs" />
+    <Compile Include="MTProto\TLClass.cs" />
+    <Compile Include="MTProto\TlObjectReaderCommon.cs" />
+    <Compile Include="MTProto\TlObjectReadersFactory.cs" />
     <Compile Include="Network\MtProtoPlainSender.cs" />
     <Compile Include="Network\MtProtoSender.cs" />
     <Compile Include="Network\TcpMessage.cs" />

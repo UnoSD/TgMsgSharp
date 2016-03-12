@@ -19,7 +19,7 @@ namespace TgMsgSharp.Launcher
 
         TgConnector CreateConnector()
         {
-            var tgConnector = new TgConnector(txtNumber.Text, string.Empty, int.Parse(txtAppId.Text), txtAppHash.Text);
+            var tgConnector = new TgConnector(txtNumber.Text, string.Empty, int.Parse(txtAppId.Text), txtAppHash.Text, txtSettingsFile.Text);
 
             tgConnector.StatusChanged += (_, status) => UpdateStatus(status);
 

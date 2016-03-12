@@ -2,11 +2,11 @@ using System.IO;
 
 namespace TgMsgSharp.Launcher
 {
-    class TgFileSettingsProvider : ITgSettingsProvider
+    public class TgFileSettingsProvider : ITgSettingsProvider
     {
         readonly FileInfo _fileInfo;
 
-        internal TgFileSettingsProvider(FileInfo fileInfo)
+        public TgFileSettingsProvider(FileInfo fileInfo)
         {
             _fileInfo = fileInfo;
         }
@@ -37,6 +37,7 @@ namespace TgMsgSharp.Launcher
 
             tgSettings.Contacts.Add(new TgContact
             {
+                Id = int.Parse(data[13]),
                 Number = data[6],
                 FirstName = data[7],
                 LastName = data[8]
@@ -44,9 +45,18 @@ namespace TgMsgSharp.Launcher
 
             tgSettings.Contacts.Add(new TgContact
             {
+                Id = int.Parse(data[14]),
                 Number = data[10],
                 FirstName = data[11],
                 LastName = data[12]
+            });
+
+            tgSettings.Contacts.Add(new TgContact
+            {
+                Id = int.Parse(data[17]),
+                Number = data[5],
+                FirstName = data[15],
+                LastName = data[16]
             });
 
             return tgSettings;

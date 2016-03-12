@@ -1,6 +1,6 @@
 namespace TgMsgSharp.Launcher
 {
-    interface ITgSettingsProvider
+    public interface ITgSettingsProvider
     {
         TgSettings GetSettings();
     }

@@ -42,16 +42,12 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ITgSettingsProvider.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SettingsSaver.cs" />
-    <Compile Include="TgContact.cs" />
-    <Compile Include="TgFileSettingsProvider.cs" />
-    <Compile Include="TgSettings.cs" />
     <Compile Include="Viewer.cs">
       <SubType>Form</SubType>
     </Compile>

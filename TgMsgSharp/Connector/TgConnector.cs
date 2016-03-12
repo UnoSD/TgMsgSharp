@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using TgMsgSharp.Launcher;
 using TLSharp.Core;
 using TLSharp.Core.MTProto;
 
@@ -11,6 +15,7 @@ namespace TgMsgSharp.Connector
     {
         public event EventHandler<ConnectorStatus> StatusChanged;
 
+        readonly TgFileSettingsProvider _settingsProvider;
         readonly TelegramClient _client;
         readonly string _number;
 
@@ -18,10 +23,9 @@ namespace TgMsgSharp.Connector
 
         UserSelfConstructor _user;
         string _hash;
-        int _retryGetMessages = 100;
 
         ConnectorStatus _status = ConnectorStatus.NotConnected;
-
+        
         public ConnectorStatus Status
         {
             get
@@ -37,12 +41,14 @@ namespace TgMsgSharp.Connector
             }
         }
 
-        public TgConnector(string number, string sessionData, int apiId, string apiHash)
+        public TgConnector(string number, string sessionData, int apiId, string apiHash, string settingsFilePath)
         {
             _number = number;
             //var sessionStore = new SerializedSingleSessionStore(number, sessionData);
             _client = new TelegramClient(new FileSessionStore(), number, apiId, apiHash);
             _contactsCache = new Dictionary<string, int>();
+
+            _settingsProvider = new TgFileSettingsProvider(new FileInfo(settingsFilePath));
         }
 
         public async Task<ConnectorStatus> Connect()
@@ -111,57 +117,71 @@ namespace TgMsgSharp.Connector
 
                 returnValue.AddRange(tgMessages);
             }
-
+            
             return returnValue;
         }
 
-        static IEnumerable<TgMessage> MapMessages(IEnumerable<Message> messages)
+        IEnumerable<TgMessage> MapMessages(IEnumerable<Message> messages)
         {
-
-            /*
-                //message#567699b3 flags:int id:int from_id:int to_id:Peer date:int message:string media:MessageMedia = Message;
-
-                message.id is actually message.flags I believe:
-
-                flags 	int 	Flag mask for the message:
-                flags & 0x1 - message is unread (moved here from unread)
-                flags & 0x2 - message was sent by the current user (moved here from out)
-                Parameter was added in Layer 17.
-            */
-
-            return messages.OfType<MessageConstructor>().Select(message => new TgMessage
+            return messages.OfType<MessageConstructor>().Select(message =>
             {
-                Flags = message.flags.ToString(),
-                SenderId = message.from_id,
-                ReceiverId = message.to_id,
-                MsgId = message.id,
-                Date = TgDateConverter.GetDateTime(message.date),
-                Text = message.message,
-                ContentType = message.media.ToString(),
-                Unread = message.unread
+                var contentType = GetContentType(message.Media);
+
+                return new TgMessage
+                {
+                    Flags = message.Flags.ToString(),
+                    Sender = GetSender(message.FromId),
+                    Receiver = GetReceiver(message.ToId),
+                    MsgId = message.Id,
+                    Date = TgDateConverter.GetDateTime(message.Date),
+                    SmallImage = contentType.Item2,
+                    Text = message.Message,
+                    ContentType = contentType.Item1,
+                    Unread = message.Unread,
+                    Output = message.Output
+                };
             });
+        }
 
-            //var photo = messageConstructor.media as MessageMediaPhotoConstructor;
-            //var audio = messageConstructor.media as MessageMediaAudioConstructor;
-            //var document = messageConstructor.media as MessageMediaDocumentConstructor;
-            //var video = messageConstructor.media as MessageMediaVideoConstructor;
-            //var contact = messageConstructor.media as MessageMediaContactConstructor;
-            //var geo = messageConstructor.media as MessageMediaGeoConstructor;
-            //var unsupportedMedia = messageConstructor.media as MessageMediaUnsupportedConstructor;
-            //var empty = messageConstructor.media as MessageMediaEmptyConstructor;
+        static Tuple<string, Image> GetContentType(MessageMedia media)
+        {
+            if (media is MessageMediaEmptyConstructor) return new Tuple<string, Image>(media.ToString(), null);
 
-            //if (photo != null)
-            //{
-            //    var photoConstructor = photo.photo as PhotoConstructor;
+            var photoMessage = media as MessageMediaPhotoConstructor;
 
-            //    if (photoConstructor == null) return;
+            var cachedPhoto = (photoMessage?.photo as PhotoConstructor)?.sizes?.OfType<PhotoCachedSizeConstructor>().FirstOrDefault();
 
-            //    var fileInfo = new FileInfo(DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss-ffff"));
+            Bitmap image = null;
 
-            //    using (var fileStream = fileInfo.OpenWrite())
-            //        using(var binaryWriter = new BinaryWriter(fileStream))
-            //            photo.Write(binaryWriter);
-            //}
+            if (cachedPhoto != null)
+                image = (Bitmap) new ImageConverter().ConvertFrom(cachedPhoto.bytes);
+
+            return new Tuple<string, Image>(media.GetType().Name, image);
+        }
+
+        string GetSender(int sender) => GetUserFromId(sender);
+
+        string GetReceiver(Peer receiver)
+        {
+            var peerUserConstructor = receiver as PeerUserConstructor;
+
+            if(peerUserConstructor != null)
+                return GetUserFromId(peerUserConstructor.user_id);
+
+            var peerChatConstructor = receiver as PeerChatConstructor;
+
+            return peerChatConstructor?.chat_id.ToString() ?? receiver.ToString();
+        }
+
+        string GetUserFromId(int userId)
+        {
+            var tgSettings = _settingsProvider.GetSettings();
+
+            var singleOrDefault = tgSettings.Contacts.SingleOrDefault(contact => contact.Id == userId);
+
+            if(singleOrDefault == null) Debugger.Break();
+
+            return singleOrDefault?.FirstName ?? string.Empty;
         }
 
         async Task<int?> GetContactId(string number, string firstName, string lastName)

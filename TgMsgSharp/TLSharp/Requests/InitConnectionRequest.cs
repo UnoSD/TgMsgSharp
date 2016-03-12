@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using TLSharp.Core.MTProto;
 
@@ -31,6 +32,21 @@ namespace TLSharp.Core.Requests
 		public override void OnResponse(BinaryReader reader)
 		{
 			uint code = reader.ReadUInt32();
+
+		    Type constructor;
+
+		    TL.constructors.TryGetValue(code, out constructor);
+
+		    //if (constructor != typeof (ConfigConstructor) )
+		    if (constructor == typeof (Messages_messagesSliceConstructor) )
+		    {
+		        var readBytes = reader.ReadBytes((int)reader.BaseStream.Length);
+                
+                throw new Exception("Error obtaining configuration.");
+                //while(true) reader
+            }
+                
+
 			ConfigConstructor config = new ConfigConstructor();
 			config.Read(reader);
 

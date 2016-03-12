@@ -36,15 +36,20 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectorStatus.cs" />
+    <Compile Include="ITgSettingsProvider.cs" />
     <Compile Include="MessagesProcessor.cs" />
+    <Compile Include="TgContact.cs" />
     <Compile Include="TgDateConverter.cs" />
+    <Compile Include="TgFileSettingsProvider.cs" />
     <Compile Include="TgMessage.cs" />
     <Compile Include="TgConnector.cs" />
     <Compile Include="SerializedSingleSessionStore.cs" />
+    <Compile Include="TgSettings.cs" />
     <Compile Include="TlParser.cs" />
   </ItemGroup>
   <ItemGroup>
