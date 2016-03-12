@@ -181,7 +181,7 @@ namespace TgMsgSharp.Connector
 
             if(singleOrDefault == null) Debugger.Break();
 
-            return singleOrDefault?.FirstName ?? string.Empty;
+            return singleOrDefault?.FirstName ?? userId.ToString();
         }
 
         async Task<int?> GetContactId(string number, string firstName, string lastName)
