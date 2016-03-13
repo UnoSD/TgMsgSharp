@@ -117,7 +117,7 @@ namespace TgMsgSharp.Launcher
 
             SetWorkInProgress(true);
 
-            _messages = (await _tgConnector.Value.GetMessages(number, name ?? "My Test Name", surname ?? string.Empty)).ToArray();
+            _messages = (await _tgConnector.Value.GetMessages(number, name ?? "My Test Name", surname ?? string.Empty)).OrderBy(message => message.Id).ToArray();
 
             SetWorkInProgress(false);
 

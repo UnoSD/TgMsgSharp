@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -105,7 +106,7 @@ namespace TgMsgSharp.Connector
 
         async Task<IReadOnlyCollection<TgMessage>> GetMessagesForContactId(int contactId)
         {
-            var returnValue = new List<TgMessage>();
+            var returnValue = new ConcurrentBag<TgMessage>();
 
             var messagesProcessor = new MessagesProcessor(_client, contactId);
 
@@ -115,10 +116,11 @@ namespace TgMsgSharp.Connector
 
                 var tgMessages = MapMessages(messages);
 
-                returnValue.AddRange(tgMessages);
+                foreach(var tgMessage in tgMessages)
+                    returnValue.Add(tgMessage);
             }
             
-            return returnValue;
+            return returnValue.ToArray();
         }
 
         IEnumerable<TgMessage> MapMessages(IEnumerable<Message> messages)
