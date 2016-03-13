@@ -12926,71 +12926,7 @@ namespace TLSharp.Core.MTProto
 	}
 
 
-	public class AudioConstructor : Audio
-	{
-		public long id;
-		public long access_hash;
-		public int user_id;
-		public int date;
-		public int duration;
-		public int size;
-		public int dc_id;
-
-		public AudioConstructor()
-		{
-
-		}
-
-		public AudioConstructor(long id, long access_hash, int user_id, int date, int duration, int size, int dc_id)
-		{
-			this.id = id;
-			this.access_hash = access_hash;
-			this.user_id = user_id;
-			this.date = date;
-			this.duration = duration;
-			this.size = size;
-			this.dc_id = dc_id;
-		}
-
-
-		public Constructor Constructor
-		{
-			get { return Constructor.audio; }
-		}
-
-		public override void Write(BinaryWriter writer)
-		{
-			writer.Write(0x427425e7);
-			writer.Write(this.id);
-			writer.Write(this.access_hash);
-			writer.Write(this.user_id);
-			writer.Write(this.date);
-			writer.Write(this.duration);
-			writer.Write(this.size);
-			writer.Write(this.dc_id);
-		}
-
-		public override void Read(BinaryReader reader)
-		{
-			this.id = reader.ReadInt64();
-			this.access_hash = reader.ReadInt64();
-			this.user_id = reader.ReadInt32();
-			this.date = reader.ReadInt32();
-			this.duration = reader.ReadInt32();
-		    Serializers.String.read(reader);
-			this.size = reader.ReadInt32();
-			this.dc_id = reader.ReadInt32();
-		}
-
-		public override string ToString()
-		{
-			return String.Format("(audio id:{0} access_hash:{1} user_id:{2} date:{3} duration:{4} size:{5} dc_id:{6})", id,
-				access_hash, user_id, date, duration, size, dc_id);
-		}
-	}
-
-
-	public class DocumentEmptyConstructor : Document
+    public class DocumentEmptyConstructor : Document
 	{
 		public long id;
 

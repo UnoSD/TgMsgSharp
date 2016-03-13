@@ -1647,11 +1647,6 @@ public class TL
         return new AudioEmptyConstructor(id);
     }
 
-    public static Audio audio(long id, long access_hash, int user_id, int date, int duration, int size, int dc_id)
-    {
-        return new AudioConstructor(id, access_hash, user_id, date, duration, size, dc_id);
-    }
-
     public static Document documentEmpty(long id)
     {
         return new DocumentEmptyConstructor(id);
