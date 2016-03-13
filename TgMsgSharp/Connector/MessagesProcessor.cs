@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NLog;
 using TLSharp.Core;
 using TLSharp.Core.MTProto;
 
@@ -11,6 +12,7 @@ namespace TgMsgSharp.Connector
         const int MaximumAttempts = 10;
 
         readonly TelegramClient _client;
+        readonly Logger _logger;
         readonly int _contactId;
         readonly int _limit;
         int _offset;
@@ -21,6 +23,7 @@ namespace TgMsgSharp.Connector
             _contactId = contactId;
             _offset = 0;
             _limit = 100;
+            _logger = LogManager.GetCurrentClassLogger();
         }
 
         public async Task<bool> GetMessagesAvailable()
@@ -32,13 +35,11 @@ namespace TgMsgSharp.Connector
                 messages = await GetMessages(_offset, 1);
             while (messages == null && attempt++ <= MaximumAttempts);
 
-            if (messages == null)
-            {
-                // Log.      
-                return false;
-            }
+            if (messages != null) return messages.Any();
 
-            return messages.Any();
+            _logger.Error($"Cannot retrieve messages after {attempt} attempt. Offset: {_offset}");
+
+            return false;
         }
 
         public async Task<IReadOnlyCollection<Message>> GetMessages()
@@ -53,7 +54,8 @@ namespace TgMsgSharp.Connector
 
             if (messages == null)
             {
-                // Log.
+                _logger.Error($"Cannot retrieve messages after {attempt} attempt. Offset: {_offset}");
+
                 return new Message[0];
             }
 

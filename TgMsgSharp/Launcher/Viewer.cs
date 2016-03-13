@@ -32,6 +32,13 @@ namespace TgMsgSharp.Launcher
 
             _tgConnector = new Lazy<TgConnector>(CreateConnector);
             _tgSettingsSaver = new Lazy<SettingsSaver>();
+
+            LogDispatcher.MessageLogged += LogDispatcherOnMessageLogged;
+        }
+
+        static void LogDispatcherOnMessageLogged(object sender, LogMessageEventArgs logMessageEventArgs)
+        {
+            MessageBox.Show($"{logMessageEventArgs.Level} - {logMessageEventArgs.Message}");
         }
 
         void PopulateSettings(ITgSettingsProvider settingsProvider)
