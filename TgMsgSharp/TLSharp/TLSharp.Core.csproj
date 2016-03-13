@@ -48,6 +48,7 @@
     <Compile Include="Auth\Step1_PQRequest.cs" />
     <Compile Include="Auth\Step2_DHExchange.cs" />
     <Compile Include="Auth\Step3_CompleteDHExchange.cs" />
+    <Compile Include="MTProto\Combinator.cs" />
     <Compile Include="MTProto\Crypto\AES.cs" />
     <Compile Include="MTProto\Crypto\AuthKey.cs" />
     <Compile Include="MTProto\Crypto\BigInteger.cs" />
@@ -56,6 +57,14 @@
     <Compile Include="MTProto\Crypto\MD5Digest.cs" />
     <Compile Include="MTProto\Crypto\RSA.cs" />
     <Compile Include="MTProto\Crypto\Salt.cs" />
+    <Compile Include="MTProto\DocumentAttributes\DocumentAttribute.cs" />
+    <Compile Include="MTProto\DocumentAttributes\DocumentAttributeAnimated.cs" />
+    <Compile Include="MTProto\DocumentAttributes\DocumentAttributeAudio.cs" />
+    <Compile Include="MTProto\DocumentAttributes\DocumentAttributeFilename.cs" />
+    <Compile Include="MTProto\DocumentAttributes\DocumentAttributeImageSize.cs" />
+    <Compile Include="MTProto\DocumentAttributes\DocumentAttributeSticker.cs" />
+    <Compile Include="MTProto\DocumentAttributes\DocumentAttributeVideo.cs" />
+    <Compile Include="MTProto\DocumentConstructor.cs" />
     <Compile Include="MTProto\IntegerExtensions.cs" />
     <Compile Include="MTProto\ITlObjectReader.cs" />
     <Compile Include="MTProto\MessageConstructor.cs" />

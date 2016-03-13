@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using TLSharp.Core.MTProto;
 
 public class TL
@@ -100,7 +103,7 @@ public class TL
             {0x77bfb61b, typeof (PhotoSizeConstructor)},
             {0xe9a734fa, typeof (PhotoCachedSizeConstructor)},
             {0xc10658a8, typeof (VideoEmptyConstructor)},
-            {0x5a04a49f, typeof (VideoConstructor)},
+            {0x388fa391, typeof (VideoConstructor)},
             {0x1117dd5f, typeof (GeoPointEmptyConstructor)},
             {0x2049d70c, typeof (GeoPointConstructor)},
             {0xe300cc3b, typeof (Auth_checkedPhoneConstructor)},
@@ -263,12 +266,13 @@ public class TL
             {0xb095434b, typeof (DecryptedMessageMediaDocumentConstructor)},
             {0x6080758f, typeof (DecryptedMessageMediaAudioConstructor)},
             {0x586988d8, typeof (AudioEmptyConstructor)},
-            {0x427425e7, typeof (AudioConstructor)},
+            {0xc7ac6496, typeof (AudioConstructor)},
             {0x36f8c871, typeof (DocumentEmptyConstructor)},
             {0xf9a39f4f, typeof (DocumentConstructor)},
         };
 
     static readonly TlObjectReadersFactory _tlObjectReadersFactory = new TlObjectReadersFactory();
+    static IReadOnlyCollection<Type> _cachedTypes;
 
     public static TLObject Parse(BinaryReader reader, uint code)
     {
@@ -292,53 +296,45 @@ public class TL
     {
         if (typeof(TLObject).IsAssignableFrom(typeof(T)))
         {
-            uint dataCode = reader.ReadUInt32();
+            var dataCode = reader.ReadUInt32();
 
-            if (!constructors.ContainsKey(dataCode))
-            {
-                throw new Exception(String.Format("invalid constructor code {0}", dataCode.ToString("X")));
-            }
+            var hexDataCode = new Combinator(dataCode);
 
-            Type constructorType = constructors[dataCode];
-            if (!typeof(T).IsAssignableFrom(constructorType))
+            if (!typeof(T).IsAssignableFrom(hexDataCode.ToType))
             {
-                throw new Exception(String.Format("try to parse {0}, but incompatible type {1}", typeof(T).FullName,
-                    constructorType.FullName));
+                Debugger.Break();
+
+                throw new Exception($"try to parse {typeof(T).FullName}, but incompatible type {hexDataCode.ToType.FullName}");
             }
 
             T obj;
 
-            var objectReader = _tlObjectReadersFactory.GetReader(constructorType);
+            var objectReader = _tlObjectReadersFactory.GetReader(hexDataCode.ToType);
 
             if (objectReader != null)
-                obj = objectReader.Read<T>(reader, constructorType);
+                obj = objectReader.Read<T>(reader, hexDataCode.ToType);
             else
             {
-                obj = (T)Activator.CreateInstance(constructorType);
+                obj = (T)Activator.CreateInstance(hexDataCode.ToType);
+
                 ((TLObject)(object)obj).Read(reader);
             }
 
             return obj;
         }
-        else if (typeof(T) == typeof(bool))
+
+        if (typeof(T) != typeof(bool)) throw new Exception("unknown return type");
+
+        var code = reader.ReadUInt32();
+
+        switch (code)
         {
-            uint code = reader.ReadUInt32();
-            if (code == 0x997275b5)
-            {
+            case 0x997275b5:
                 return (T)(object)true;
-            }
-            else if (code == 0xbc799737)
-            {
+            case 0xbc799737:
                 return (T)(object)false;
-            }
-            else
-            {
+            default:
                 throw new Exception("unknown bool value");
-            }
-        }
-        else
-        {
-            throw new Exception("unknown return type");
         }
     }
 
@@ -1667,4 +1663,30 @@ public class TL
         return new DocumentConstructor(id, access_hash, user_id, date, file_name, mime_type, size, thumb, dc_id);
     }
 
+    public static Type GetCombinatorType(uint dataCode)
+    {
+        Type value;
+
+        return constructors.TryGetValue(dataCode, out value) ? value : GetCombinatorTypeReflection(dataCode);
+    }
+
+    static Type GetCombinatorTypeReflection(uint dataCode)
+    {
+        if (_cachedTypes == null)
+            CreateTypesCache();
+
+        // ReSharper disable once AssignNullToNotNullAttribute
+        var single = _cachedTypes.Single(type => ((Combinator)type.GetProperty("Combinator").GetValue(null)).DataCode == dataCode);
+
+        return single;
+    }
+
+    static void CreateTypesCache()
+    {
+        var types = Assembly.GetExecutingAssembly().GetTypes();
+
+        var enumerable = types.Where(type => typeof(TLObject).IsAssignableFrom(type));
+
+        _cachedTypes = enumerable.Where(type => type.GetProperties().Any(info => info.Name == "Combinator")).ToArray();
+    }
 }

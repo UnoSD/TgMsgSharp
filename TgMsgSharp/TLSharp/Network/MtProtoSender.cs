@@ -209,7 +209,7 @@ namespace TLSharp.Core.Network
 
 		private bool HandleUpdate(ulong messageId, int sequence, BinaryReader messageReader)
 		{
-		    var update = TL.Parse<Updates>(messageReader);
+		    //var update = TL.Parse<Updates>(messageReader);
 
 
             return false;
