@@ -8,11 +8,13 @@ namespace TgMsgSharp.Connector
 {
     public class MessagesProcessor
     {
+        const int MaximumAttempts = 10;
+
         readonly TelegramClient _client;
         readonly int _contactId;
         readonly int _limit;
         int _offset;
-
+        
         public MessagesProcessor(TelegramClient client, int contactId)
         {
             _client = client;
@@ -23,14 +25,37 @@ namespace TgMsgSharp.Connector
 
         public async Task<bool> GetMessagesAvailable()
         {
-            var messages = await GetMessages(_offset, 1);
+            IReadOnlyCollection<Message> messages = null;
+            var attempt = 0;
+
+            do
+                messages = await GetMessages(_offset, 1);
+            while (messages == null && attempt++ <= MaximumAttempts);
+
+            if (messages == null)
+            {
+                // Log.      
+                return false;
+            }
 
             return messages.Any();
         }
 
         public async Task<IReadOnlyCollection<Message>> GetMessages()
         {
-            var messages = await GetMessages(_offset, _limit);
+            IReadOnlyCollection<Message> messages = null;
+            var attempt = 0;
+
+            do
+            {
+                messages = await GetMessages(_offset, _limit);
+            } while (messages == null && attempt++ <= MaximumAttempts);
+
+            if (messages == null)
+            {
+                // Log.
+                return new Message[0];
+            }
 
             _offset += messages.Count;
 
