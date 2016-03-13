@@ -132,7 +132,7 @@ namespace TgMsgSharp.Connector
                     Flags = message.Flags.ToString(),
                     Sender = GetSender(message.FromId),
                     Receiver = GetReceiver(message.ToId),
-                    MsgId = message.Id,
+                    Id = message.Id,
                     Date = TgDateConverter.GetDateTime(message.Date),
                     SmallImage = contentType.Item2,
                     Text = message.Message,
