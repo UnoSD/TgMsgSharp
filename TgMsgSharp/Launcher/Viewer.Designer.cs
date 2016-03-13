@@ -47,9 +47,10 @@
             this.txtSettingsFile = new System.Windows.Forms.TextBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.lvwLog = new System.Windows.Forms.ListView();
+            this.chrDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chrLevel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chrMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chrDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnExport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.SuspendLayout();
             // 
@@ -229,10 +230,15 @@
             this.lvwLog.HoverSelection = true;
             this.lvwLog.Location = new System.Drawing.Point(12, 284);
             this.lvwLog.Name = "lvwLog";
-            this.lvwLog.Size = new System.Drawing.Size(1155, 154);
+            this.lvwLog.Size = new System.Drawing.Size(1045, 154);
             this.lvwLog.TabIndex = 9;
             this.lvwLog.UseCompatibleStateImageBehavior = false;
             this.lvwLog.View = System.Windows.Forms.View.Details;
+            // 
+            // chrDate
+            // 
+            this.chrDate.Text = "Date";
+            this.chrDate.Width = 78;
             // 
             // chrLevel
             // 
@@ -242,18 +248,24 @@
             // chrMessage
             // 
             this.chrMessage.Text = "Message";
-            this.chrMessage.Width = 957;
+            this.chrMessage.Width = 864;
             // 
-            // chrDate
+            // btnExport
             // 
-            this.chrDate.Text = "Date";
-            this.chrDate.Width = 78;
+            this.btnExport.Location = new System.Drawing.Point(1063, 284);
+            this.btnExport.Name = "btnExport";
+            this.btnExport.Size = new System.Drawing.Size(104, 23);
+            this.btnExport.TabIndex = 10;
+            this.btnExport.Text = "Export";
+            this.btnExport.UseVisualStyleBackColor = true;
+            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
             // Viewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1179, 450);
+            this.Controls.Add(this.btnExport);
             this.Controls.Add(this.lvwLog);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.txtSettingsFile);
@@ -303,6 +315,7 @@
         private System.Windows.Forms.ColumnHeader chrLevel;
         private System.Windows.Forms.ColumnHeader chrMessage;
         private System.Windows.Forms.ColumnHeader chrDate;
+        private System.Windows.Forms.Button btnExport;
     }
 }
 

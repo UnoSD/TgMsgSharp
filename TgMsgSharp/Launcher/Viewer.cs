@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Storage;
 using TgMsgSharp.Connector;
 using TgMsgSharp.Launcher.Properties;
 
@@ -17,6 +18,8 @@ namespace TgMsgSharp.Launcher
 
         readonly Lazy<TgConnector> _tgConnector;
         readonly Lazy<SettingsSaver> _tgSettingsSaver;
+
+        IReadOnlyCollection<TgMessage> _messages;
 
         TgConnector CreateConnector()
         {
@@ -114,11 +117,11 @@ namespace TgMsgSharp.Launcher
 
             SetWorkInProgress(true);
 
-            var messages = (await _tgConnector.Value.GetMessages(number, name ?? "My Test Name", surname ?? string.Empty)).ToArray();
+            _messages = (await _tgConnector.Value.GetMessages(number, name ?? "My Test Name", surname ?? string.Empty)).ToArray();
 
             SetWorkInProgress(false);
 
-            PopulateMessagesList(number, name, surname, messages);
+            PopulateMessagesList(number, name, surname, _messages);
         }
 
         void SetWorkInProgress(bool status)
@@ -171,6 +174,7 @@ namespace TgMsgSharp.Launcher
             btnLoad.Enabled = true;
             btnSave.Enabled = true;
             lvwLog.Enabled = true;
+            btnExport.Enabled = true;
 
             switch (status)
             {
@@ -212,13 +216,18 @@ namespace TgMsgSharp.Launcher
 
         void btnBrowse_Click(object sender, EventArgs e)
         {
+            txtSettingsFile.Text = GetSaveFile();
+        }
+
+        string GetSaveFile()
+        {
             var saveFileDialog = new SaveFileDialog();
 
             var dialogResult = saveFileDialog.ShowDialog();
 
-            if (dialogResult != DialogResult.OK) return;
+            if (dialogResult != DialogResult.OK) return null;
 
-            txtSettingsFile.Text = saveFileDialog.FileName;
+            return saveFileDialog.FileName;
         }
 
         void btnLoad_Click(object sender, EventArgs e)
@@ -257,6 +266,22 @@ namespace TgMsgSharp.Launcher
             Settings.Default.TgSettingsPath = txtSettingsFile.Text;
 
             Settings.Default.Save();
+        }
+
+        void btnExport_Click(object sender, EventArgs e)
+        {
+            var exportFile = GetSaveFile();
+
+            if(exportFile == null) return;
+
+            var tgContext = new TgContext(new FileInfo(exportFile));
+
+            // Filter out the already written ones.
+            tgContext.Messages.AddRange(_messages);
+
+            tgContext.SaveChanges();
+
+            MessageBox.Show("Data saved.");
         }
     }
 }
