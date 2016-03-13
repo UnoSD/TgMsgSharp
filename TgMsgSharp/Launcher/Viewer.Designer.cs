@@ -46,6 +46,10 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.txtSettingsFile = new System.Windows.Forms.TextBox();
             this.btnBrowse = new System.Windows.Forms.Button();
+            this.lvwLog = new System.Windows.Forms.ListView();
+            this.chrLevel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chrMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chrDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.SuspendLayout();
             // 
@@ -213,11 +217,44 @@
             this.btnBrowse.UseVisualStyleBackColor = true;
             this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
+            // lvwLog
+            // 
+            this.lvwLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chrDate,
+            this.chrLevel,
+            this.chrMessage});
+            this.lvwLog.FullRowSelect = true;
+            this.lvwLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.lvwLog.HideSelection = false;
+            this.lvwLog.HoverSelection = true;
+            this.lvwLog.Location = new System.Drawing.Point(12, 284);
+            this.lvwLog.Name = "lvwLog";
+            this.lvwLog.Size = new System.Drawing.Size(1155, 154);
+            this.lvwLog.TabIndex = 9;
+            this.lvwLog.UseCompatibleStateImageBehavior = false;
+            this.lvwLog.View = System.Windows.Forms.View.Details;
+            // 
+            // chrLevel
+            // 
+            this.chrLevel.Text = "Level";
+            this.chrLevel.Width = 85;
+            // 
+            // chrMessage
+            // 
+            this.chrMessage.Text = "Message";
+            this.chrMessage.Width = 957;
+            // 
+            // chrDate
+            // 
+            this.chrDate.Text = "Date";
+            this.chrDate.Width = 78;
+            // 
             // Viewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1179, 290);
+            this.ClientSize = new System.Drawing.Size(1179, 450);
+            this.Controls.Add(this.lvwLog);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.txtSettingsFile);
             this.Controls.Add(this.btnSave);
@@ -262,6 +299,10 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.TextBox txtSettingsFile;
         private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.ListView lvwLog;
+        private System.Windows.Forms.ColumnHeader chrLevel;
+        private System.Windows.Forms.ColumnHeader chrMessage;
+        private System.Windows.Forms.ColumnHeader chrDate;
     }
 }
 

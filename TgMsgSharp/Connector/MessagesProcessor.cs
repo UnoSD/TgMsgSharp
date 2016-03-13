@@ -61,6 +61,8 @@ namespace TgMsgSharp.Connector
 
             _offset += messages.Count;
 
+            _logger.Trace($"Messages loaded: #{_offset}#");
+
             return messages;
         }
 

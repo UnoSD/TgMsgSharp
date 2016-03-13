@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -36,9 +37,26 @@ namespace TgMsgSharp.Launcher
             LogDispatcher.MessageLogged += LogDispatcherOnMessageLogged;
         }
 
-        static void LogDispatcherOnMessageLogged(object sender, LogMessageEventArgs logMessageEventArgs)
+        void LogDispatcherOnMessageLogged(object sender, LogMessageEventArgs logMessageEventArgs)
         {
-            MessageBox.Show($"{logMessageEventArgs.Level} - {logMessageEventArgs.Message}");
+            if (logMessageEventArgs.Level == "Trace" && logMessageEventArgs.Message.StartsWith("Messages loaded: #"))
+            {
+                this.Text = logMessageEventArgs.Message;
+
+                return;
+            }
+
+            var date = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+
+            var item = lvwLog.Items.Add
+                (
+                    new ListViewItem
+                    (
+                        new[] { date, logMessageEventArgs.Level, logMessageEventArgs.Message }
+                    )
+                );
+
+            lvwLog.EnsureVisible(item.Index);
         }
 
         void PopulateSettings(ITgSettingsProvider settingsProvider)
@@ -152,6 +170,7 @@ namespace TgMsgSharp.Launcher
             btnBrowse.Enabled = true;
             btnLoad.Enabled = true;
             btnSave.Enabled = true;
+            lvwLog.Enabled = true;
 
             switch (status)
             {
