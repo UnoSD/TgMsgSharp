@@ -49,6 +49,7 @@
     <Compile Include="LogDispatcher.cs" />
     <Compile Include="LogMessageEventArgs.cs" />
     <Compile Include="MessagesProcessor.cs" />
+    <Compile Include="ParallelMessagesProcessor.cs" />
     <Compile Include="TgContact.cs" />
     <Compile Include="TgDateConverter.cs" />
     <Compile Include="TgFileSettingsProvider.cs" />

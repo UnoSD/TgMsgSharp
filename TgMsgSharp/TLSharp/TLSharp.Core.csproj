@@ -79,6 +79,9 @@
     <Compile Include="MTProto\TlObjectReadersFactory.cs" />
     <Compile Include="Network\MtProtoPlainSender.cs" />
     <Compile Include="Network\MtProtoSender.cs" />
+    <Compile Include="Network\ParallelMtProtoPlainSender.cs" />
+    <Compile Include="Network\ParallelMtProtoSender.cs" />
+    <Compile Include="Network\ParallelTcpTransport.cs" />
     <Compile Include="Network\TcpMessage.cs" />
     <Compile Include="Network\TcpTransport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
