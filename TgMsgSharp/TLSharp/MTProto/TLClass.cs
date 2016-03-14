@@ -61,7 +61,6 @@ public class TL
             {0x200250ba, typeof (UserEmptyConstructor)},
             {0x720535EC, typeof (UserSelfConstructor)},
             {0x7007b451, typeof (UserSelfConstructor)},
-            {0xf2fb8319, typeof (UserContactConstructor)},
             {0x22e8ceb0, typeof (UserRequestConstructor)},
             {0x5214c89d, typeof (UserForeignConstructor)},
             {0xb29ad7cc, typeof (UserDeletedConstructor)},
@@ -585,12 +584,6 @@ public class TL
         UserStatus status, bool inactive)
     {
         return new UserSelfConstructor(id, first_name, last_name, phone, photo, status, inactive);
-    }
-
-    public static User userContact(int id, string first_name, string last_name, long access_hash, string phone,
-        UserProfilePhoto photo, UserStatus status)
-    {
-        return new UserContactConstructor(id, first_name, last_name, access_hash, phone, photo, status);
     }
 
     public static User userRequest(int id, string first_name, string last_name, long access_hash, string phone,
@@ -1671,7 +1664,7 @@ public class TL
             CreateTypesCache();
 
         // ReSharper disable once AssignNullToNotNullAttribute
-        var single = _cachedTypes.Single(type => ((Combinator)type.GetProperty("Combinator").GetValue(null)).DataCode == dataCode);
+        var single = _cachedTypes.SingleOrDefault(type => ((Combinator)type.GetProperty("Combinator").GetValue(null)).DataCode == dataCode);
 
         return single;
     }

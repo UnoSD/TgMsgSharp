@@ -77,6 +77,8 @@ namespace TgMsgSharp.Launcher
 
         void PopulateContacts(IEnumerable<TgContact> contacts)
         {
+            lvwContacts.Items.Clear();
+
             Func<TgContact, ListViewItem> mapperSelector =
                 contact => new ListViewItem(new[] { contact.FirstName, contact.LastName, contact.Number });
 
@@ -185,6 +187,7 @@ namespace TgMsgSharp.Launcher
                     btnAuth.Enabled = true;
                     break;
                 case ConnectorStatus.Connected:
+                    UpdateContactsList();
                     txtRecipient.Enabled = true;
                     txtRecipient.Text = string.Empty;
                     txtDownload.Enabled = true;
@@ -201,6 +204,13 @@ namespace TgMsgSharp.Launcher
                 default:
                     throw new ArgumentOutOfRangeException(nameof(status), status, null);
             }
+        }
+
+        async void UpdateContactsList()
+        {
+            var contacts = await _tgConnector.Value.GetContacts();
+
+            PopulateContacts(contacts);
         }
 
         void lvwContacts_SelectedIndexChanged(object sender, EventArgs e)

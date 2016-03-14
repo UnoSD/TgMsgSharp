@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace TLSharp.Core.MTProto
 {
-    [DebuggerDisplay(nameof(ToHex))]
+    [DebuggerDisplay("{" + nameof(ToHex) + "}")]
     public struct Combinator
     {
         public uint DataCode { get; set; }

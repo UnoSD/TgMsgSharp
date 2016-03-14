@@ -17,6 +17,7 @@ namespace TgMsgSharp.Connector
         public event EventHandler<ConnectorStatus> StatusChanged;
 
         readonly TgFileSettingsProvider _settingsProvider;
+        readonly UserMapper _usersMapper;
         readonly TelegramClient _client;
         readonly string _number;
 
@@ -47,8 +48,8 @@ namespace TgMsgSharp.Connector
             _number = number;
             //var sessionStore = new SerializedSingleSessionStore(number, sessionData);
             _client = new TelegramClient(new FileSessionStore(), number, apiId, apiHash);
+            _usersMapper = new UserMapper();
             _contactsCache = new Dictionary<string, int>();
-
             _settingsProvider = new TgFileSettingsProvider(new FileInfo(settingsFilePath));
         }
 
@@ -213,6 +214,15 @@ namespace TgMsgSharp.Connector
             {
                 return null;
             }
+        }
+
+        public async Task<IReadOnlyCollection<TgContact>> GetContacts()
+        {
+            var contacts = await _client.GetContacts();
+
+            var userContactConstructors = contacts.OfType<UserContactConstructor>();
+
+            return _usersMapper.Map(userContactConstructors).ToArray();
         }
     }
 }
