@@ -229,15 +229,13 @@ namespace TgMsgSharp.Launcher
             txtSettingsFile.Text = GetSaveFile();
         }
 
-        string GetSaveFile()
+        static string GetSaveFile()
         {
             var saveFileDialog = new SaveFileDialog();
 
             var dialogResult = saveFileDialog.ShowDialog();
 
-            if (dialogResult != DialogResult.OK) return null;
-
-            return saveFileDialog.FileName;
+            return dialogResult != DialogResult.OK ? null : saveFileDialog.FileName;
         }
 
         void btnLoad_Click(object sender, EventArgs e)
@@ -271,7 +269,7 @@ namespace TgMsgSharp.Launcher
             MessageBox.Show("Saved!");
         }
 
-        private void txtSettingsFile_TextChanged(object sender, EventArgs e)
+        void txtSettingsFile_TextChanged(object sender, EventArgs e)
         {
             Settings.Default.TgSettingsPath = txtSettingsFile.Text;
 

@@ -181,9 +181,7 @@ namespace TgMsgSharp.Connector
             var tgSettings = _settingsProvider.GetSettings();
 
             var singleOrDefault = tgSettings.Contacts.SingleOrDefault(contact => contact.Id == userId);
-
-            if(singleOrDefault == null) Debugger.Break();
-
+            
             return singleOrDefault?.FirstName ?? userId.ToString();
         }
 

@@ -1,91 +1,51 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 
 namespace TgMsgSharp.Launcher
 {
     public class SortableBindingList<T> : BindingList<T>
     {
-        private ArrayList sortedList;
-        private ArrayList unsortedItems;
-        private bool isSortedValue;
+        bool _isSortedValue;
+        ListSortDirection _sortDirectionValue;
+        PropertyDescriptor _sortPropertyValue;
 
-        public SortableBindingList()
+        public SortableBindingList(IEnumerable<T> list)
         {
+            foreach (var item in list)
+                this.Add(item);
         }
 
-        public SortableBindingList(IList<T> list)
-        {
-            foreach (object o in list)
-            {
-                this.Add((T)o);
-            }
-        }
-
-        protected override bool SupportsSearchingCore
-        {
-            get
-            {
-                return true;
-            }
-        }
+        protected override bool SupportsSearchingCore => true;
 
         protected override int FindCore(PropertyDescriptor prop, object key)
         {
-            PropertyInfo propInfo = typeof(T).GetProperty(prop.Name);
-            T item;
+            var propInfo = typeof(T).GetProperty(prop.Name);
 
-            if (key != null)
+            if (key == null) return -1;
+
+            for (var i = 0; i < Count; ++i)
             {
-                for (int i = 0; i < Count; ++i)
-                {
-                    item = (T)Items[i];
-                    if (propInfo.GetValue(item, null).Equals(key))
-                        return i;
-                }
+                var item = Items[i];
+                if (propInfo.GetValue(item, null).Equals(key))
+                    return i;
             }
+
             return -1;
         }
 
-        public int Find(string property, object key)
+        protected override bool SupportsSortingCore => true;
+        
+        protected override bool IsSortedCore => _isSortedValue;
+
+        protected override void ApplySortCore(PropertyDescriptor prop, ListSortDirection direction)
         {
-            PropertyDescriptorCollection properties =
-                TypeDescriptor.GetProperties(typeof(T));
-            PropertyDescriptor prop = properties.Find(property, true);
-
-            if (prop == null)
-                return -1;
-            else
-                return FindCore(prop, key);
-        }
-
-        protected override bool SupportsSortingCore
-        {
-            get { return true; }
-        }
-
-
-        protected override bool IsSortedCore
-        {
-            get { return isSortedValue; }
-        }
-
-        ListSortDirection sortDirectionValue;
-        PropertyDescriptor sortPropertyValue;
-
-        protected override void ApplySortCore(PropertyDescriptor prop,
-            ListSortDirection direction)
-        {
-            sortedList = new ArrayList();
-
-            Type interfaceType = prop.PropertyType.GetInterface("IComparable");
+            var interfaceType = prop.PropertyType.GetInterface("IComparable");
 
             if (interfaceType == null && prop.PropertyType.IsValueType)
             {
-                Type underlyingType = Nullable.GetUnderlyingType(prop.PropertyType);
+                var underlyingType = Nullable.GetUnderlyingType(prop.PropertyType);
 
                 if (underlyingType != null)
                 {
@@ -95,78 +55,31 @@ namespace TgMsgSharp.Launcher
 
             if (interfaceType != null)
             {
-                sortPropertyValue = prop;
-                sortDirectionValue = direction;
+                _sortPropertyValue = prop;
+                _sortDirectionValue = direction;
 
                 IEnumerable<T> query = base.Items;
-                if (direction == ListSortDirection.Ascending)
-                {
-                    query = query.OrderBy(i => prop.GetValue(i));
-                }
-                else
-                {
-                    query = query.OrderByDescending(i => prop.GetValue(i));
-                }
-                int newIndex = 0;
+
+                query = direction == ListSortDirection.Ascending ? query.OrderBy(i => prop.GetValue(i)) : query.OrderByDescending(i => prop.GetValue(i));
+
+                var newIndex = 0;
+
                 foreach (object item in query)
                 {
-                    this.Items[newIndex] = (T)item;
+                    this.Items[newIndex] = (T) item;
                     newIndex++;
                 }
-                isSortedValue = true;
-                this.OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
 
+                _isSortedValue = true;
+
+                this.OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
             }
             else
-            {
-                throw new NotSupportedException("Cannot sort by " + prop.Name +
-                    ". This" + prop.PropertyType.ToString() +
-                    " does not implement IComparable");
-            }
+                throw new NotSupportedException($"Cannot sort by {prop.Name}. This{prop.PropertyType} does not implement IComparable");
         }
+        
+        protected override PropertyDescriptor SortPropertyCore => _sortPropertyValue;
 
-        protected override void RemoveSortCore()
-        {
-            int position;
-            object temp;
-
-            if (unsortedItems != null)
-            {
-                for (int i = 0; i < unsortedItems.Count;)
-                {
-                    position = this.Find("LastName",
-                        unsortedItems[i].GetType().
-                        GetProperty("LastName").GetValue(unsortedItems[i], null));
-                    if (position > 0 && position != i)
-                    {
-                        temp = this[i];
-                        this[i] = this[position];
-                        this[position] = (T)temp;
-                        i++;
-                    }
-                    else if (position == i)
-                        i++;
-                    else
-                        unsortedItems.RemoveAt(i);
-                }
-                isSortedValue = false;
-                OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
-            }
-        }
-
-        public void RemoveSort()
-        {
-            RemoveSortCore();
-        }
-        protected override PropertyDescriptor SortPropertyCore
-        {
-            get { return sortPropertyValue; }
-        }
-
-        protected override ListSortDirection SortDirectionCore
-        {
-            get { return sortDirectionValue; }
-        }
-
+        protected override ListSortDirection SortDirectionCore => _sortDirectionValue;
     }
 }
