@@ -49,6 +49,7 @@
     <Compile Include="Auth\Step2_DHExchange.cs" />
     <Compile Include="Auth\Step3_CompleteDHExchange.cs" />
     <Compile Include="GetContactsRequest.cs" />
+    <Compile Include="ContactsContacts.cs" />
     <Compile Include="MTProto\AudioConstructor.cs" />
     <Compile Include="MTProto\UserSelfConstructor.cs" />
     <Compile Include="MTProto\UserStatusLastMonth.cs" />
@@ -83,8 +84,10 @@
     <Compile Include="MTProto\TlObjectReaderCommon.cs" />
     <Compile Include="MTProto\TlObjectReadersFactory.cs" />
     <Compile Include="MTProto\UserContactConstructor.cs" />
+    <Compile Include="Network\ResponseHandlerFactory.cs" />
     <Compile Include="Network\MtProtoPlainSender.cs" />
     <Compile Include="Network\MtProtoSender.cs" />
+    <Compile Include="Network\MtProtoSenderRefactoring.cs" />
     <Compile Include="Network\ParallelMtProtoPlainSender.cs" />
     <Compile Include="Network\ParallelMtProtoSender.cs" />
     <Compile Include="Network\ParallelTcpTransport.cs" />

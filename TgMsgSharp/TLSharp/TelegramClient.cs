@@ -242,14 +242,15 @@ namespace TLSharp.Core
 			return regex.IsMatch(number);
 		}
 
-	    public async Task<List<User>> GetContacts()
+	    public async Task<ContactsContacts> GetContacts()
 	    {
 	        var request = new GetContactsRequest(string.Empty);
 
             await _sender.Send(request);
-            await _sender.Recieve(request);
+            
+            var response = await _sender.Receive<ContactsContacts>(request);
 
-            return request.Users;
+            return response;
         }
 	}
 }

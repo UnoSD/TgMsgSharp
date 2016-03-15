@@ -14,7 +14,7 @@ using TLSharp.Core.Utils;
 
 namespace TLSharp.Core.Network
 {
-    public class MtProtoSender
+    public partial class MtProtoSender
     {
         //private ulong sessionId = GenerateRandomUlong();
 
@@ -301,7 +301,7 @@ namespace TLSharp.Core.Network
                     using (var packedStream = new MemoryStream(packedData, false))
                     {
                         var zipStream = new GZipStream(packedStream, CompressionMode.Decompress);
-                        
+
                         var compressedReader = new BinaryReader(zipStream);
 
                         request.OnResponse(compressedReader);

@@ -1664,7 +1664,7 @@ public class TL
             CreateTypesCache();
 
         // ReSharper disable once AssignNullToNotNullAttribute
-        var single = _cachedTypes.SingleOrDefault(type => ((Combinator)type.GetProperty("Combinator").GetValue(null)).DataCode == dataCode);
+        var single = _cachedTypes.SingleOrDefault(type => ((Combinator)type.GetProperty("Combinator").GetValue(null)).Name == dataCode);
 
         return single;
     }

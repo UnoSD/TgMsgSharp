@@ -220,7 +220,7 @@ namespace TgMsgSharp.Connector
         {
             var contacts = await _client.GetContacts();
 
-            var userContactConstructors = contacts.OfType<UserContactConstructor>();
+            var userContactConstructors = contacts.Users.OfType<UserContactConstructor>();
 
             return _usersMapper.Map(userContactConstructors).ToArray();
         }
