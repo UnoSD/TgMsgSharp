@@ -243,8 +243,8 @@ namespace TLSharp.Core.Network
 
         private bool HandleRpcResult(ulong messageId, int sequence, BinaryReader messageReader, MTProtoRequest request)
         {
-            uint code = messageReader.ReadUInt32();
-            ulong requestId = messageReader.ReadUInt64();
+            var code = new Combinator(messageReader.ReadUInt32());
+            var requestId = messageReader.ReadUInt64();
 
             if (requestId == (ulong)request.MessageId)
                 request.ConfirmReceived = true;

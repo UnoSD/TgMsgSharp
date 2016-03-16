@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TgMsgSharp.Launcher;
@@ -16,7 +14,6 @@ namespace TgMsgSharp.Connector
         public event EventHandler<ConnectorStatus> StatusChanged;
 
         readonly Lazy<IReadOnlyCollection<TgContact>> _cachedContacts;
-        readonly TgFileSettingsProvider _settingsProvider;
         readonly UserMapper _usersMapper;
         readonly TelegramClient _client;
         readonly string _number;
@@ -41,7 +38,7 @@ namespace TgMsgSharp.Connector
             }
         }
 
-        public TgConnector(string number, int apiId, string apiHash, string settingsFilePath)
+        public TgConnector(string number, int apiId, string apiHash)
         {
             Tl.CreateCombinatorsLookupCache();
 
@@ -49,8 +46,7 @@ namespace TgMsgSharp.Connector
             //var sessionStore = new SerializedSingleSessionStore(number, sessionData);
             _client = new TelegramClient(new FileSessionStore(), number, apiId, apiHash);
             _usersMapper = new UserMapper();
-            _settingsProvider = new TgFileSettingsProvider(new FileInfo(settingsFilePath));
-            _cachedContacts = new Lazy<IReadOnlyCollection<TgContact>>(() => GetContacts().Result);
+            _cachedContacts = new Lazy<IReadOnlyCollection<TgContact>>(() => Task.Run(GetContacts).Result);
         }
 
         public async Task<ConnectorStatus> Connect()
@@ -106,18 +102,17 @@ namespace TgMsgSharp.Connector
 
         async Task<IReadOnlyCollection<TgMessage>> GetMessagesForContactId(int contactId)
         {
-            var returnValue = new ConcurrentBag<TgMessage>();
+            var returnValue = new List<TgMessage>();
 
             var messagesProcessor = new MessagesProcessor(_client, contactId);
 
-            for (var messages = await messagesProcessor.GetMessages(); ; messages.Any())
+            for(var messages = await messagesProcessor.GetMessages(); messages.Any(); messages = await messagesProcessor.GetMessages())
             {
                 var tgMessages = MapMessages(messages);
 
-                foreach(var tgMessage in tgMessages)
-                    returnValue.Add(tgMessage);
+                returnValue.AddRange(tgMessages);
             }
-            
+
             return returnValue.ToArray();
         }
 

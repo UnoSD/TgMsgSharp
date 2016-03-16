@@ -32,14 +32,10 @@ namespace TLSharp.Core.Requests
 
 		public override void OnResponse(BinaryReader reader)
 		{
-			uint code = reader.ReadUInt32();
-
-		    Type constructor;
-
-		    CombinatorsMap.Constructors.TryGetValue(code, out constructor);
+			var code = new Combinator(reader.ReadUInt32());
 
 		    //if (constructor != typeof (ConfigConstructor) )
-		    if (constructor == typeof (Messages_messagesSliceConstructor) )
+		    if (code.ToType == typeof (Messages_messagesSliceConstructor) )
 		    {
 		        var gzipStream = reader.BaseStream as GZipStream;
 
@@ -69,12 +65,9 @@ namespace TLSharp.Core.Requests
 			throw new NotImplementedException();
 		}
 
-		public override bool Responded
-		{
-			get { return true; }
-		}
+		public override bool Responded => true;
 
-		public override void OnSendSuccess()
+	    public override void OnSendSuccess()
 		{
 
 		}
