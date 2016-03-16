@@ -23,7 +23,7 @@ namespace TLSharp.Core.MTProto
         // Test you get no exceptions by testing all uint critical values.
         public string ToHex => Name.ToString("X");
 
-        public Type ToType => TL.GetCombinatorType(Name);
+        public Type ToType => Tl.GetCombinatorType(Name);
 
         public Combinator(uint name)
         {

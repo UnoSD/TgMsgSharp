@@ -38,7 +38,7 @@ namespace TLSharp.Core.Network
 
             for (var index = 0; index < count; index++)
             {
-                var contact = TL.Parse<Contact>(reader);
+                var contact = Tl.Parse<Contact>(reader);
 
                 contactsContacts.Contacts.Add(contact);
             }
@@ -53,7 +53,7 @@ namespace TLSharp.Core.Network
 
             for (var index = 0; index < count; index++)
             {
-                var user = TL.Parse<User>(reader);
+                var user = Tl.Parse<User>(reader);
 
                 contactsContacts.Users.Add(user);
             }

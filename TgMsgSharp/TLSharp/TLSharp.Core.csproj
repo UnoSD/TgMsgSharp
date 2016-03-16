@@ -51,6 +51,7 @@
     <Compile Include="GetContactsRequest.cs" />
     <Compile Include="ContactsContacts.cs" />
     <Compile Include="MTProto\AudioConstructor.cs" />
+    <Compile Include="MTProto\CombinatorsMap.cs" />
     <Compile Include="MTProto\UserSelfConstructor.cs" />
     <Compile Include="MTProto\UserStatusLastMonth.cs" />
     <Compile Include="MTProto\UserStatusLastWeek.cs" />

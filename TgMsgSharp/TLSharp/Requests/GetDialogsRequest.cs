@@ -44,7 +44,7 @@ namespace TLSharp.Core.Requests
             for (int dialogs_index = 0; dialogs_index < dialogs_len; dialogs_index++)
             {
                 Dialog dialog_element;
-                dialog_element = TL.Parse<Dialog>(reader);
+                dialog_element = Tl.Parse<Dialog>(reader);
                 dialogs.Add(dialog_element);
             }
             // messages
@@ -54,7 +54,7 @@ namespace TLSharp.Core.Requests
             for (int message_index = 0; message_index < messages_len; message_index++)
             {
                 Message messages_element;
-                messages_element = TL.Parse<Message>(reader);
+                messages_element = Tl.Parse<Message>(reader);
                 messages.Add(messages_element);
             }
             // chats
@@ -64,7 +64,7 @@ namespace TLSharp.Core.Requests
             for (int chat_index = 0; chat_index < chats_len; chat_index++)
             {
                 Chat chats_element;
-                chats_element = TL.Parse<Chat>(reader);
+                chats_element = Tl.Parse<Chat>(reader);
                 chats.Add(chats_element);
             }
             // users
@@ -74,7 +74,7 @@ namespace TLSharp.Core.Requests
             for (int users_index = 0; users_index < users_len; users_index++)
             {
                 User users_element;
-                users_element = TL.Parse<User>(reader);
+                users_element = Tl.Parse<User>(reader);
                 users.Add(users_element);
             }
         }

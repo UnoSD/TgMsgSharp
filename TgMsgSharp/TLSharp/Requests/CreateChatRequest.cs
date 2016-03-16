@@ -29,7 +29,7 @@ namespace TLSharp.Core.Requests
 
         public override void OnResponse(BinaryReader reader)
         {
-            message = TL.Parse<Messages_statedMessageConstructor>(reader);
+            message = Tl.Parse<Messages_statedMessageConstructor>(reader);
         }
 
         public override void OnException(Exception exception)

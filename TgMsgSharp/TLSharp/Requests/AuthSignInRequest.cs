@@ -31,7 +31,7 @@ namespace TLSharp.Core.Requests
 		{
 			var dataCode = reader.ReadUInt32(); //0xf6b673a4
 			var expires = reader.ReadInt32();
-			user = TL.Parse<User>(reader);
+			user = Tl.Parse<User>(reader);
 		}
 
 		public override void OnException(Exception exception)

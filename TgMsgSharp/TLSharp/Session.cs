@@ -122,7 +122,7 @@ namespace TLSharp.Core
 				if (isAuthExsist)
 				{
 					sessionExpires = reader.ReadInt32();
-					user = TL.Parse<User>(reader);
+					user = Tl.Parse<User>(reader);
 				}
 
 				var authData = Serializers.Bytes.read(reader);

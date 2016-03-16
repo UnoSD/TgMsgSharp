@@ -36,7 +36,7 @@ namespace TLSharp.Core.Requests
 
 		    Type constructor;
 
-		    TL.constructors.TryGetValue(code, out constructor);
+		    CombinatorsMap.Constructors.TryGetValue(code, out constructor);
 
 		    //if (constructor != typeof (ConfigConstructor) )
 		    if (constructor == typeof (Messages_messagesSliceConstructor) )

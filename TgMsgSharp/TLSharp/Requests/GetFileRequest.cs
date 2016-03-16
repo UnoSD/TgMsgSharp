@@ -33,7 +33,7 @@ namespace TLSharp.Core.Requests
         {
             var code = reader.ReadUInt32(); // upload.file#96a18d5
             
-            type = TL.Parse<storage_FileType>(reader);
+            type = Tl.Parse<storage_FileType>(reader);
             mtime = reader.ReadInt32();
             bytes = reader.ReadBytes(_limit);
         }

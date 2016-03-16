@@ -32,8 +32,8 @@ namespace TLSharp.Core.MTProto
             this.Username = Serializers.String.read(reader);
             this.access_hash = reader.ReadInt64();
             this.phone = Serializers.String.read(reader);
-            this.photo = TL.Parse<UserProfilePhoto>(reader);
-            this.status = TL.Parse<UserStatus>(reader);
+            this.photo = Tl.Parse<UserProfilePhoto>(reader);
+            this.status = Tl.Parse<UserStatus>(reader);
         }
 
         public string Username { get; set; }

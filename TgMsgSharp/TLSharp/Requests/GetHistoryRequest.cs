@@ -45,7 +45,7 @@ namespace TLSharp.Core.Requests
 			messages = new List<Message>(messages_len);
 			for (var i = 0; i < messages_len; i++)
 			{
-				var msgEl = TL.Parse<Message>(reader);
+				var msgEl = Tl.Parse<Message>(reader);
 
 				messages.Add(msgEl);
 			}
@@ -55,7 +55,7 @@ namespace TLSharp.Core.Requests
 			int chats_len = reader.ReadInt32();
 			chats = new List<Chat>(chats_len);
 			for (int i = 0; i < chats_len; i++)
-				chats.Add(TL.Parse<Chat>(reader));
+				chats.Add(Tl.Parse<Chat>(reader));
 
 			/*
 			// users

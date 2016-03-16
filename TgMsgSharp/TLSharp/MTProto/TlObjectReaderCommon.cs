@@ -16,8 +16,8 @@ namespace TLSharp.Core.MTProto
             {
                 [typeof(int)] = reader => reader.ReadInt32(),
                 [typeof(string)] = reader => Serializers.String.read(reader),
-                [typeof(Peer)] = reader => TL.Parse<Peer>(reader),
-                [typeof(MessageMedia)] = reader => TL.Parse<MessageMedia>(reader)
+                [typeof(Peer)] = reader => Tl.Parse<Peer>(reader),
+                [typeof(MessageMedia)] = reader => Tl.Parse<MessageMedia>(reader)
         };
         }
 

@@ -64,7 +64,7 @@ namespace TLSharp.Core.MTProto
             this.date = reader.ReadInt32();
             this.mime_type = Serializers.String.read(reader);
             this.size = reader.ReadInt32();
-            this.thumb = TL.Parse<PhotoSize>(reader);
+            this.thumb = Tl.Parse<PhotoSize>(reader);
             this.dc_id = reader.ReadInt32();
 
             // Vector
@@ -75,7 +75,7 @@ namespace TLSharp.Core.MTProto
 
             for (var index = 0; index < vectorSize; index++)
             {
-                var attribute = TL.Parse<DocumentAttribute>(reader);
+                var attribute = Tl.Parse<DocumentAttribute>(reader);
 
                 documentAttributes.Add(attribute);
             }

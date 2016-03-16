@@ -37,7 +37,7 @@ namespace TLSharp.Core.Requests
 			for (int imported_index = 0; imported_index < imported_len; imported_index++)
 			{
 				ImportedContact imported_element;
-				imported_element = TL.Parse<ImportedContact>(reader);
+				imported_element = Tl.Parse<ImportedContact>(reader);
 				this.imported.Add(imported_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -46,7 +46,7 @@ namespace TLSharp.Core.Requests
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}

@@ -33,7 +33,7 @@ namespace TLSharp.Core.Requests
             {
                 users = new List<User>(users_len);
                 for (int i = 0; i < users_len; i++)
-                    users.Add(TL.Parse<User>(reader));
+                    users.Add(Tl.Parse<User>(reader));
             }
         }
 

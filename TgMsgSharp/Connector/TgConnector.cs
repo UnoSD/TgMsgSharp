@@ -21,8 +21,6 @@ namespace TgMsgSharp.Connector
         readonly TelegramClient _client;
         readonly string _number;
 
-        readonly IDictionary<string, int> _contactsCache;
-
         UserSelfConstructor _user;
         string _hash;
 
@@ -43,13 +41,14 @@ namespace TgMsgSharp.Connector
             }
         }
 
-        public TgConnector(string number, string sessionData, int apiId, string apiHash, string settingsFilePath)
+        public TgConnector(string number, int apiId, string apiHash, string settingsFilePath)
         {
+            Tl.CreateCombinatorsLookupCache();
+
             _number = number;
             //var sessionStore = new SerializedSingleSessionStore(number, sessionData);
             _client = new TelegramClient(new FileSessionStore(), number, apiId, apiHash);
             _usersMapper = new UserMapper();
-            _contactsCache = new Dictionary<string, int>();
             _settingsProvider = new TgFileSettingsProvider(new FileInfo(settingsFilePath));
             _cachedContacts = new Lazy<IReadOnlyCollection<TgContact>>(() => GetContacts().Result);
         }
@@ -89,8 +88,7 @@ namespace TgMsgSharp.Connector
 
             if (_user == null) return ConnectorStatus.ClientError;
 
-            if (!_contactsCache.ContainsKey(_number))
-                _contactsCache.Add(_number, _user.id);
+            // Is it myself in the contact list?
 
             return ConnectorStatus.Connected;
         }
@@ -112,9 +110,7 @@ namespace TgMsgSharp.Connector
 
             var messagesProcessor = new MessagesProcessor(_client, contactId);
 
-            IReadOnlyCollection<Message> messages;
-
-            while ((messages = await messagesProcessor.GetMessages()).Any())
+            for (var messages = await messagesProcessor.GetMessages(); ; messages.Any())
             {
                 var tgMessages = MapMessages(messages);
 
@@ -179,8 +175,6 @@ namespace TgMsgSharp.Connector
 
         string GetUserFromId(int userId)
         {
-            var tgSettings = _settingsProvider.GetSettings();
-
             var singleOrDefault = this.GetCachedContacts().SingleOrDefault(contact => contact.Id == userId);
             
             return singleOrDefault?.FirstName ?? userId.ToString();
@@ -188,19 +182,13 @@ namespace TgMsgSharp.Connector
 
         async Task<int?> GetContactId(string number, string firstName, string lastName)
         {
-            int contactId;
+            var tgContact = _cachedContacts.Value.SingleOrDefault(contact => contact.Number == number);
 
-            if (_contactsCache.TryGetValue(number, out contactId)) return contactId;
+            if (tgContact != null) return tgContact.Id;
 
             var newContactId = await TryGetContactId(number, firstName, lastName);
 
-            if (!newContactId.HasValue) return null;
-
-            contactId = newContactId.Value;
-
-            _contactsCache.Add(number, contactId);
-
-            return contactId;
+            return newContactId;
         }
 
         async Task<int?> TryGetContactId(string number, string firstName, string lastName)

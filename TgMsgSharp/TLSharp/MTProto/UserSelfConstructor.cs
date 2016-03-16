@@ -67,8 +67,8 @@ namespace TLSharp.Core.MTProto
             //    if (type != null) type.ToString();
             //}
             
-            this.photo = TL.Parse<UserProfilePhoto>(reader);
-            this.status = TL.Parse<UserStatus>(reader);
+            this.photo = Tl.Parse<UserProfilePhoto>(reader);
+            this.status = Tl.Parse<UserStatus>(reader);
             this.inactive = reader.ReadUInt32() == 0x997275b5;
         }
 

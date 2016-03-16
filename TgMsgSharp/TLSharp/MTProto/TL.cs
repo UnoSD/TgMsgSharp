@@ -1307,7 +1307,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.file = TL.Parse<InputFile>(reader);
+			this.file = Tl.Parse<InputFile>(reader);
 		}
 
 		public override string ToString()
@@ -1345,7 +1345,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.id = TL.Parse<InputPhoto>(reader);
+			this.id = Tl.Parse<InputPhoto>(reader);
 		}
 
 		public override string ToString()
@@ -1383,7 +1383,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.geo_point = TL.Parse<InputGeoPoint>(reader);
+			this.geo_point = Tl.Parse<InputGeoPoint>(reader);
 		}
 
 		public override string ToString()
@@ -1477,7 +1477,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.file = TL.Parse<InputFile>(reader);
+			this.file = Tl.Parse<InputFile>(reader);
 			this.duration = reader.ReadInt32();
 			this.w = reader.ReadInt32();
 			this.h = reader.ReadInt32();
@@ -1530,8 +1530,8 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.file = TL.Parse<InputFile>(reader);
-			this.thumb = TL.Parse<InputFile>(reader);
+			this.file = Tl.Parse<InputFile>(reader);
+			this.thumb = Tl.Parse<InputFile>(reader);
 			this.duration = reader.ReadInt32();
 			this.w = reader.ReadInt32();
 			this.h = reader.ReadInt32();
@@ -1573,7 +1573,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.id = TL.Parse<InputVideo>(reader);
+			this.id = Tl.Parse<InputVideo>(reader);
 		}
 
 		public override string ToString()
@@ -1645,8 +1645,8 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.file = TL.Parse<InputFile>(reader);
-			this.crop = TL.Parse<InputPhotoCrop>(reader);
+			this.file = Tl.Parse<InputFile>(reader);
+			this.crop = Tl.Parse<InputPhotoCrop>(reader);
 		}
 
 		public override string ToString()
@@ -1687,8 +1687,8 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.id = TL.Parse<InputPhoto>(reader);
-			this.crop = TL.Parse<InputPhotoCrop>(reader);
+			this.id = Tl.Parse<InputPhoto>(reader);
+			this.crop = Tl.Parse<InputPhotoCrop>(reader);
 		}
 
 		public override string ToString()
@@ -2674,8 +2674,8 @@ namespace TLSharp.Core.MTProto
 			this.last_name = Serializers.String.read(reader);
 			this.access_hash = reader.ReadInt64();
 			this.phone = Serializers.String.read(reader);
-			this.photo = TL.Parse<UserProfilePhoto>(reader);
-			this.status = TL.Parse<UserStatus>(reader);
+			this.photo = Tl.Parse<UserProfilePhoto>(reader);
+			this.status = Tl.Parse<UserStatus>(reader);
 		}
 
 		public override string ToString()
@@ -2736,8 +2736,8 @@ namespace TLSharp.Core.MTProto
 			this.first_name = Serializers.String.read(reader);
 			this.last_name = Serializers.String.read(reader);
 			this.access_hash = reader.ReadInt64();
-			this.photo = TL.Parse<UserProfilePhoto>(reader);
-			this.status = TL.Parse<UserStatus>(reader);
+			this.photo = Tl.Parse<UserProfilePhoto>(reader);
+			this.status = Tl.Parse<UserStatus>(reader);
 		}
 
 		public override string ToString()
@@ -2860,8 +2860,8 @@ namespace TLSharp.Core.MTProto
 		public override void Read(BinaryReader reader)
 		{
 			this.photo_id = reader.ReadInt64();
-			this.photo_small = TL.Parse<FileLocation>(reader);
-			this.photo_big = TL.Parse<FileLocation>(reader);
+			this.photo_small = Tl.Parse<FileLocation>(reader);
+			this.photo_big = Tl.Parse<FileLocation>(reader);
 		}
 
 		public override string ToString()
@@ -3065,7 +3065,7 @@ namespace TLSharp.Core.MTProto
 		{
 			this.id = reader.ReadInt32();
 			this.title = Serializers.String.read(reader);
-			this.photo = TL.Parse<ChatPhoto>(reader);
+			this.photo = Tl.Parse<ChatPhoto>(reader);
 			this.participants_count = reader.ReadInt32();
 			this.date = reader.ReadInt32();
 			this.left = reader.ReadUInt32() == 0x997275b5;
@@ -3164,9 +3164,9 @@ namespace TLSharp.Core.MTProto
 		public override void Read(BinaryReader reader)
 		{
 			this.id = reader.ReadInt32();
-			this.participants = TL.Parse<ChatParticipants>(reader);
-			this.chat_photo = TL.Parse<Photo>(reader);
-			this.notify_settings = TL.Parse<PeerNotifySettings>(reader);
+			this.participants = Tl.Parse<ChatParticipants>(reader);
+			this.chat_photo = Tl.Parse<Photo>(reader);
+			this.notify_settings = Tl.Parse<PeerNotifySettings>(reader);
 		}
 
 		public override string ToString()
@@ -3311,7 +3311,7 @@ namespace TLSharp.Core.MTProto
 			for (int participants_index = 0; participants_index < participants_len; participants_index++)
 			{
 				ChatParticipant participants_element;
-				participants_element = TL.Parse<ChatParticipant>(reader);
+				participants_element = Tl.Parse<ChatParticipant>(reader);
 				this.participants.Add(participants_element);
 			}
 			this.version = reader.ReadInt32();
@@ -3387,8 +3387,8 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.photo_small = TL.Parse<FileLocation>(reader);
-			this.photo_big = TL.Parse<FileLocation>(reader);
+			this.photo_small = Tl.Parse<FileLocation>(reader);
+			this.photo_big = Tl.Parse<FileLocation>(reader);
 		}
 
 		public override string ToString()
@@ -3501,7 +3501,7 @@ namespace TLSharp.Core.MTProto
 			this.unread = reader.ReadUInt32() == 0x997275b5;
 			this.date = reader.ReadInt32();
 			this.message = Serializers.String.read(reader);
-			this.media = TL.Parse<MessageMedia>(reader);
+			this.media = Tl.Parse<MessageMedia>(reader);
 		}
 
 		public override string ToString()
@@ -3563,11 +3563,11 @@ namespace TLSharp.Core.MTProto
 		{
 			this.id = reader.ReadInt32();
 			this.from_id = reader.ReadInt32();
-			this.to_id = TL.Parse<Peer>(reader);
+			this.to_id = Tl.Parse<Peer>(reader);
 			this.output = reader.ReadUInt32() == 0x997275b5;
 			this.unread = reader.ReadUInt32() == 0x997275b5;
 			this.date = reader.ReadInt32();
-			this.action = TL.Parse<MessageAction>(reader);
+			this.action = Tl.Parse<MessageAction>(reader);
 		}
 
 		public override string ToString()
@@ -3637,7 +3637,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.photo = TL.Parse<Photo>(reader);
+			this.photo = Tl.Parse<Photo>(reader);
 		}
 
 		public override string ToString()
@@ -3675,7 +3675,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.video = TL.Parse<Video>(reader);
+			this.video = Tl.Parse<Video>(reader);
 		}
 
 		public override string ToString()
@@ -3713,7 +3713,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.geo = TL.Parse<GeoPoint>(reader);
+			this.geo = Tl.Parse<GeoPoint>(reader);
 		}
 
 		public override string ToString()
@@ -3964,7 +3964,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.photo = TL.Parse<Photo>(reader);
+			this.photo = Tl.Parse<Photo>(reader);
 		}
 
 		public override string ToString()
@@ -4115,7 +4115,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.peer = TL.Parse<Peer>(reader);
+			this.peer = Tl.Parse<Peer>(reader);
 			this.top_message = reader.ReadInt32();
 			this.unread_count = reader.ReadInt32();
 		}
@@ -4222,14 +4222,14 @@ namespace TLSharp.Core.MTProto
 			this.user_id = reader.ReadInt32();
 			this.date = reader.ReadInt32();
 			this.caption = Serializers.String.read(reader);
-			this.geo = TL.Parse<GeoPoint>(reader);
+			this.geo = Tl.Parse<GeoPoint>(reader);
 			reader.ReadInt32(); // vector code
 			int sizes_len = reader.ReadInt32();
 			this.sizes = new List<PhotoSize>(sizes_len);
 			for (int sizes_index = 0; sizes_index < sizes_len; sizes_index++)
 			{
 				PhotoSize sizes_element;
-				sizes_element = TL.Parse<PhotoSize>(reader);
+				sizes_element = Tl.Parse<PhotoSize>(reader);
 				this.sizes.Add(sizes_element);
 			}
 		}
@@ -4321,7 +4321,7 @@ namespace TLSharp.Core.MTProto
 		public override void Read(BinaryReader reader)
 		{
 			this.type = Serializers.String.read(reader);
-			this.location = TL.Parse<FileLocation>(reader);
+			this.location = Tl.Parse<FileLocation>(reader);
 			this.w = reader.ReadInt32();
 			this.h = reader.ReadInt32();
 			this.size = reader.ReadInt32();
@@ -4375,7 +4375,7 @@ namespace TLSharp.Core.MTProto
 		public override void Read(BinaryReader reader)
 		{
 			this.type = Serializers.String.read(reader);
-			this.location = TL.Parse<FileLocation>(reader);
+			this.location = Tl.Parse<FileLocation>(reader);
 			this.w = reader.ReadInt32();
 			this.h = reader.ReadInt32();
 			this.bytes = Serializers.Bytes.read(reader);
@@ -4497,7 +4497,7 @@ namespace TLSharp.Core.MTProto
 			this.duration = reader.ReadInt32();
             this.mime_type = Serializers.String.read(reader);
             this.size = reader.ReadInt32();
-			this.thumb = TL.Parse<PhotoSize>(reader);
+			this.thumb = Tl.Parse<PhotoSize>(reader);
 			this.dc_id = reader.ReadInt32();
 			this.w = reader.ReadInt32();
 			this.h = reader.ReadInt32();
@@ -4702,7 +4702,7 @@ namespace TLSharp.Core.MTProto
 		public override void Read(BinaryReader reader)
 		{
 			this.expires = reader.ReadInt32();
-			this.user = TL.Parse<User>(reader);
+			this.user = Tl.Parse<User>(reader);
 		}
 
 		public override string ToString()
@@ -4782,7 +4782,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.peer = TL.Parse<InputPeer>(reader);
+			this.peer = Tl.Parse<InputPeer>(reader);
 		}
 
 		public override string ToString()
@@ -5192,7 +5192,7 @@ namespace TLSharp.Core.MTProto
 			for (int sizes_index = 0; sizes_index < sizes_len; sizes_index++)
 			{
 				PhotoSize sizes_element;
-				sizes_element = TL.Parse<PhotoSize>(reader);
+				sizes_element = Tl.Parse<PhotoSize>(reader);
 				this.sizes.Add(sizes_element);
 			}
 			this.color = reader.ReadInt32();
@@ -5253,10 +5253,10 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.user = TL.Parse<User>(reader);
-			this.link = TL.Parse<contacts_Link>(reader);
-			this.profile_photo = TL.Parse<Photo>(reader);
-			this.notify_settings = TL.Parse<PeerNotifySettings>(reader);
+			this.user = Tl.Parse<User>(reader);
+			this.link = Tl.Parse<contacts_Link>(reader);
+			this.profile_photo = Tl.Parse<Photo>(reader);
+			this.notify_settings = Tl.Parse<PeerNotifySettings>(reader);
 			this.blocked = reader.ReadUInt32() == 0x997275b5;
 			this.real_first_name = Serializers.String.read(reader);
 			this.real_last_name = Serializers.String.read(reader);
@@ -5796,9 +5796,9 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.my_link = TL.Parse<contacts_MyLink>(reader);
-			this.foreign_link = TL.Parse<contacts_ForeignLink>(reader);
-			this.user = TL.Parse<User>(reader);
+			this.my_link = Tl.Parse<contacts_MyLink>(reader);
+			this.foreign_link = Tl.Parse<contacts_ForeignLink>(reader);
+			this.user = Tl.Parse<User>(reader);
 		}
 
 		public override string ToString()
@@ -5855,7 +5855,7 @@ namespace TLSharp.Core.MTProto
 			for (int contacts_index = 0; contacts_index < contacts_len; contacts_index++)
 			{
 				Contact contacts_element;
-				contacts_element = TL.Parse<Contact>(reader);
+				contacts_element = Tl.Parse<Contact>(reader);
 				this.contacts.Add(contacts_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -5864,7 +5864,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -5955,7 +5955,7 @@ namespace TLSharp.Core.MTProto
 			for (int imported_index = 0; imported_index < imported_len; imported_index++)
 			{
 				ImportedContact imported_element;
-				imported_element = TL.Parse<ImportedContact>(reader);
+				imported_element = Tl.Parse<ImportedContact>(reader);
 				this.imported.Add(imported_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -5964,7 +5964,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -6024,7 +6024,7 @@ namespace TLSharp.Core.MTProto
 			for (int blocked_index = 0; blocked_index < blocked_len; blocked_index++)
 			{
 				ContactBlocked blocked_element;
-				blocked_element = TL.Parse<ContactBlocked>(reader);
+				blocked_element = Tl.Parse<ContactBlocked>(reader);
 				this.blocked.Add(blocked_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6033,7 +6033,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -6097,7 +6097,7 @@ namespace TLSharp.Core.MTProto
 			for (int blocked_index = 0; blocked_index < blocked_len; blocked_index++)
 			{
 				ContactBlocked blocked_element;
-				blocked_element = TL.Parse<ContactBlocked>(reader);
+				blocked_element = Tl.Parse<ContactBlocked>(reader);
 				this.blocked.Add(blocked_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6106,7 +6106,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -6166,7 +6166,7 @@ namespace TLSharp.Core.MTProto
 			for (int results_index = 0; results_index < results_len; results_index++)
 			{
 				ContactFound results_element;
-				results_element = TL.Parse<ContactFound>(reader);
+				results_element = Tl.Parse<ContactFound>(reader);
 				this.results.Add(results_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6175,7 +6175,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -6235,7 +6235,7 @@ namespace TLSharp.Core.MTProto
 			for (int results_index = 0; results_index < results_len; results_index++)
 			{
 				ContactSuggested results_element;
-				results_element = TL.Parse<ContactSuggested>(reader);
+				results_element = Tl.Parse<ContactSuggested>(reader);
 				this.results.Add(results_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6244,7 +6244,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -6320,7 +6320,7 @@ namespace TLSharp.Core.MTProto
 			for (int dialogs_index = 0; dialogs_index < dialogs_len; dialogs_index++)
 			{
 				Dialog dialogs_element;
-				dialogs_element = TL.Parse<Dialog>(reader);
+				dialogs_element = Tl.Parse<Dialog>(reader);
 				this.dialogs.Add(dialogs_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6329,7 +6329,7 @@ namespace TLSharp.Core.MTProto
 			for (int messages_index = 0; messages_index < messages_len; messages_index++)
 			{
 				Message messages_element;
-				messages_element = TL.Parse<Message>(reader);
+				messages_element = Tl.Parse<Message>(reader);
 				this.messages.Add(messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6338,7 +6338,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6347,7 +6347,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -6429,7 +6429,7 @@ namespace TLSharp.Core.MTProto
 			for (int dialogs_index = 0; dialogs_index < dialogs_len; dialogs_index++)
 			{
 				Dialog dialogs_element;
-				dialogs_element = TL.Parse<Dialog>(reader);
+				dialogs_element = Tl.Parse<Dialog>(reader);
 				this.dialogs.Add(dialogs_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6438,7 +6438,7 @@ namespace TLSharp.Core.MTProto
 			for (int messages_index = 0; messages_index < messages_len; messages_index++)
 			{
 				Message messages_element;
-				messages_element = TL.Parse<Message>(reader);
+				messages_element = Tl.Parse<Message>(reader);
 				this.messages.Add(messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6447,7 +6447,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6456,7 +6456,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -6525,7 +6525,7 @@ namespace TLSharp.Core.MTProto
 			for (int messages_index = 0; messages_index < messages_len; messages_index++)
 			{
 				Message messages_element;
-				messages_element = TL.Parse<Message>(reader);
+				messages_element = Tl.Parse<Message>(reader);
 				this.messages.Add(messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6534,7 +6534,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6543,7 +6543,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -6615,7 +6615,7 @@ namespace TLSharp.Core.MTProto
 			for (int messages_index = 0; messages_index < messages_len; messages_index++)
 			{
 				Message messages_element;
-				messages_element = TL.Parse<Message>(reader);
+				messages_element = Tl.Parse<Message>(reader);
 				this.messages.Add(messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6624,7 +6624,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6633,7 +6633,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -6721,14 +6721,14 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.message = TL.Parse<Message>(reader);
+			this.message = Tl.Parse<Message>(reader);
 			reader.ReadInt32(); // vector code
 			int chats_len = reader.ReadInt32();
 			this.chats = new List<Chat>(chats_len);
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6737,7 +6737,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -6811,7 +6811,7 @@ namespace TLSharp.Core.MTProto
 			for (int messages_index = 0; messages_index < messages_len; messages_index++)
 			{
 				Message messages_element;
-				messages_element = TL.Parse<Message>(reader);
+				messages_element = Tl.Parse<Message>(reader);
 				this.messages.Add(messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6820,7 +6820,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -6829,7 +6829,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 			this.pts = reader.ReadInt32();
@@ -6894,14 +6894,14 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.message = TL.Parse<Message>(reader);
+			this.message = Tl.Parse<Message>(reader);
 			reader.ReadInt32(); // vector code
 			int chats_len = reader.ReadInt32();
 			this.chats = new List<Chat>(chats_len);
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			/*
@@ -7013,14 +7013,14 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.chat = TL.Parse<Chat>(reader);
+			this.chat = Tl.Parse<Chat>(reader);
 			reader.ReadInt32(); // vector code
 			int users_len = reader.ReadInt32();
 			this.users = new List<User>(users_len);
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -7079,7 +7079,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -7088,7 +7088,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -7145,14 +7145,14 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.full_chat = TL.Parse<ChatFull>(reader);
+			this.full_chat = Tl.Parse<ChatFull>(reader);
 			reader.ReadInt32(); // vector code
 			int chats_len = reader.ReadInt32();
 			this.chats = new List<Chat>(chats_len);
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -7161,7 +7161,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -7375,7 +7375,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.message = TL.Parse<Message>(reader);
+			this.message = Tl.Parse<Message>(reader);
 			this.pts = reader.ReadInt32();
 		}
 
@@ -7701,7 +7701,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.participants = TL.Parse<ChatParticipants>(reader);
+			this.participants = Tl.Parse<ChatParticipants>(reader);
 		}
 
 		public override string ToString()
@@ -7743,7 +7743,7 @@ namespace TLSharp.Core.MTProto
 		public override void Read(BinaryReader reader)
 		{
 			this.user_id = reader.ReadInt32();
-			this.status = TL.Parse<UserStatus>(reader);
+			this.status = Tl.Parse<UserStatus>(reader);
 		}
 
 		public override string ToString()
@@ -7838,7 +7838,7 @@ namespace TLSharp.Core.MTProto
 		{
 			this.user_id = reader.ReadInt32();
 			this.date = reader.ReadInt32();
-			this.photo = TL.Parse<UserProfilePhoto>(reader);
+			this.photo = Tl.Parse<UserProfilePhoto>(reader);
 			this.previous = reader.ReadUInt32() == 0x997275b5;
 		}
 
@@ -7926,8 +7926,8 @@ namespace TLSharp.Core.MTProto
 		public override void Read(BinaryReader reader)
 		{
 			this.user_id = reader.ReadInt32();
-			this.my_link = TL.Parse<contacts_MyLink>(reader);
-			this.foreign_link = TL.Parse<contacts_ForeignLink>(reader);
+			this.my_link = Tl.Parse<contacts_MyLink>(reader);
+			this.foreign_link = Tl.Parse<contacts_ForeignLink>(reader);
 		}
 
 		public override string ToString()
@@ -8198,7 +8198,7 @@ namespace TLSharp.Core.MTProto
 			for (int new_messages_index = 0; new_messages_index < new_messages_len; new_messages_index++)
 			{
 				Message new_messages_element;
-				new_messages_element = TL.Parse<Message>(reader);
+				new_messages_element = Tl.Parse<Message>(reader);
 				this.new_messages.Add(new_messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8209,7 +8209,7 @@ namespace TLSharp.Core.MTProto
 				new_encrypted_messages_index++)
 			{
 				EncryptedMessage new_encrypted_messages_element;
-				new_encrypted_messages_element = TL.Parse<EncryptedMessage>(reader);
+				new_encrypted_messages_element = Tl.Parse<EncryptedMessage>(reader);
 				this.new_encrypted_messages.Add(new_encrypted_messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8218,7 +8218,7 @@ namespace TLSharp.Core.MTProto
 			for (int other_updates_index = 0; other_updates_index < other_updates_len; other_updates_index++)
 			{
 				Update other_updates_element;
-				other_updates_element = TL.Parse<Update>(reader);
+				other_updates_element = Tl.Parse<Update>(reader);
 				this.other_updates.Add(other_updates_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8227,7 +8227,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8236,10 +8236,10 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
-			this.state = TL.Parse<updates_State>(reader);
+			this.state = Tl.Parse<updates_State>(reader);
 		}
 
 		public override string ToString()
@@ -8329,7 +8329,7 @@ namespace TLSharp.Core.MTProto
 			for (int new_messages_index = 0; new_messages_index < new_messages_len; new_messages_index++)
 			{
 				Message new_messages_element;
-				new_messages_element = TL.Parse<Message>(reader);
+				new_messages_element = Tl.Parse<Message>(reader);
 				this.new_messages.Add(new_messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8340,7 +8340,7 @@ namespace TLSharp.Core.MTProto
 				new_encrypted_messages_index++)
 			{
 				EncryptedMessage new_encrypted_messages_element;
-				new_encrypted_messages_element = TL.Parse<EncryptedMessage>(reader);
+				new_encrypted_messages_element = Tl.Parse<EncryptedMessage>(reader);
 				this.new_encrypted_messages.Add(new_encrypted_messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8349,7 +8349,7 @@ namespace TLSharp.Core.MTProto
 			for (int other_updates_index = 0; other_updates_index < other_updates_len; other_updates_index++)
 			{
 				Update other_updates_element;
-				other_updates_element = TL.Parse<Update>(reader);
+				other_updates_element = Tl.Parse<Update>(reader);
 				this.other_updates.Add(other_updates_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8358,7 +8358,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8367,10 +8367,10 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
-			this.intermediate_state = TL.Parse<updates_State>(reader);
+			this.intermediate_state = Tl.Parse<updates_State>(reader);
 		}
 
 		public override string ToString()
@@ -8570,7 +8570,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.update = TL.Parse<Update>(reader);
+			this.update = Tl.Parse<Update>(reader);
 			this.date = reader.ReadInt32();
 		}
 
@@ -8646,7 +8646,7 @@ namespace TLSharp.Core.MTProto
 			for (int updates_index = 0; updates_index < updates_len; updates_index++)
 			{
 				Update updates_element;
-				updates_element = TL.Parse<Update>(reader);
+				updates_element = Tl.Parse<Update>(reader);
 				this.updates.Add(updates_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8655,7 +8655,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8664,7 +8664,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			this.date = reader.ReadInt32();
@@ -8742,7 +8742,7 @@ namespace TLSharp.Core.MTProto
 			for (int updates_index = 0; updates_index < updates_len; updates_index++)
 			{
 				Update updates_element;
-				updates_element = TL.Parse<Update>(reader);
+				updates_element = Tl.Parse<Update>(reader);
 				this.updates.Add(updates_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8751,7 +8751,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8760,7 +8760,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			this.date = reader.ReadInt32();
@@ -8822,7 +8822,7 @@ namespace TLSharp.Core.MTProto
 			for (int photos_index = 0; photos_index < photos_len; photos_index++)
 			{
 				Photo photos_element;
-				photos_element = TL.Parse<Photo>(reader);
+				photos_element = Tl.Parse<Photo>(reader);
 				this.photos.Add(photos_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8831,7 +8831,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -8895,7 +8895,7 @@ namespace TLSharp.Core.MTProto
 			for (int photos_index = 0; photos_index < photos_len; photos_index++)
 			{
 				Photo photos_element;
-				photos_element = TL.Parse<Photo>(reader);
+				photos_element = Tl.Parse<Photo>(reader);
 				this.photos.Add(photos_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -8904,7 +8904,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -8953,14 +8953,14 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.photo = TL.Parse<Photo>(reader);
+			this.photo = Tl.Parse<Photo>(reader);
 			reader.ReadInt32(); // vector code
 			int users_len = reader.ReadInt32();
 			this.users = new List<User>(users_len);
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -9006,7 +9006,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.type = TL.Parse<storage_FileType>(reader);
+			this.type = Tl.Parse<storage_FileType>(reader);
 			this.mtime = reader.ReadInt32();
 			this.bytes = Serializers.Bytes.read(reader);
 		}
@@ -9123,7 +9123,7 @@ namespace TLSharp.Core.MTProto
 			for (int dc_options_index = 0; dc_options_index < dc_options_len; dc_options_index++)
 			{
 				DcOption dc_options_element;
-				dc_options_element = TL.Parse<DcOption>(reader);
+				dc_options_element = Tl.Parse<DcOption>(reader);
 				this.dc_options.Add(dc_options_element);
 			}
 			this.chat_size_max = reader.ReadInt32();
@@ -9372,7 +9372,7 @@ namespace TLSharp.Core.MTProto
 			for (int messages_index = 0; messages_index < messages_len; messages_index++)
 			{
 				Message messages_element;
-				messages_element = TL.Parse<Message>(reader);
+				messages_element = Tl.Parse<Message>(reader);
 				this.messages.Add(messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -9381,7 +9381,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -9390,7 +9390,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -9399,7 +9399,7 @@ namespace TLSharp.Core.MTProto
 			for (int links_index = 0; links_index < links_len; links_index++)
 			{
 				contacts_Link links_element;
-				links_element = TL.Parse<contacts_Link>(reader);
+				links_element = Tl.Parse<contacts_Link>(reader);
 				this.links.Add(links_element);
 			}
 			this.pts = reader.ReadInt32();
@@ -9474,14 +9474,14 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.message = TL.Parse<Message>(reader);
+			this.message = Tl.Parse<Message>(reader);
 			reader.ReadInt32(); // vector code
 			int chats_len = reader.ReadInt32();
 			this.chats = new List<Chat>(chats_len);
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -9490,7 +9490,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -9499,7 +9499,7 @@ namespace TLSharp.Core.MTProto
 			for (int links_index = 0; links_index < links_len; links_index++)
 			{
 				contacts_Link links_element;
-				links_element = TL.Parse<contacts_Link>(reader);
+				links_element = Tl.Parse<contacts_Link>(reader);
 				this.links.Add(links_element);
 			}
 			this.pts = reader.ReadInt32();
@@ -9570,7 +9570,7 @@ namespace TLSharp.Core.MTProto
 			for (int links_index = 0; links_index < links_len; links_index++)
 			{
 				contacts_Link links_element;
-				links_element = TL.Parse<contacts_Link>(reader);
+				links_element = Tl.Parse<contacts_Link>(reader);
 				this.links.Add(links_element);
 			}
 		}
@@ -9653,7 +9653,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.peer = TL.Parse<InputGeoChat>(reader);
+			this.peer = Tl.Parse<InputGeoChat>(reader);
 		}
 
 		public override string ToString()
@@ -9727,8 +9727,8 @@ namespace TLSharp.Core.MTProto
 			this.title = Serializers.String.read(reader);
 			this.address = Serializers.String.read(reader);
 			this.venue = Serializers.String.read(reader);
-			this.geo = TL.Parse<GeoPoint>(reader);
-			this.photo = TL.Parse<ChatPhoto>(reader);
+			this.geo = Tl.Parse<GeoPoint>(reader);
+			this.photo = Tl.Parse<ChatPhoto>(reader);
 			this.participants_count = reader.ReadInt32();
 			this.date = reader.ReadInt32();
 			this.checked_in = reader.ReadUInt32() == 0x997275b5;
@@ -9835,7 +9835,7 @@ namespace TLSharp.Core.MTProto
 			this.from_id = reader.ReadInt32();
 			this.date = reader.ReadInt32();
 			this.message = Serializers.String.read(reader);
-			this.media = TL.Parse<MessageMedia>(reader);
+			this.media = Tl.Parse<MessageMedia>(reader);
 		}
 
 		public override string ToString()
@@ -9890,7 +9890,7 @@ namespace TLSharp.Core.MTProto
 			this.id = reader.ReadInt32();
 			this.from_id = reader.ReadInt32();
 			this.date = reader.ReadInt32();
-			this.action = TL.Parse<MessageAction>(reader);
+			this.action = Tl.Parse<MessageAction>(reader);
 		}
 
 		public override string ToString()
@@ -9948,14 +9948,14 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.message = TL.Parse<GeoChatMessage>(reader);
+			this.message = Tl.Parse<GeoChatMessage>(reader);
 			reader.ReadInt32(); // vector code
 			int chats_len = reader.ReadInt32();
 			this.chats = new List<Chat>(chats_len);
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -9964,7 +9964,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 			this.seq = reader.ReadInt32();
@@ -10042,7 +10042,7 @@ namespace TLSharp.Core.MTProto
 			for (int results_index = 0; results_index < results_len; results_index++)
 			{
 				ChatLocated results_element;
-				results_element = TL.Parse<ChatLocated>(reader);
+				results_element = Tl.Parse<ChatLocated>(reader);
 				this.results.Add(results_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -10051,7 +10051,7 @@ namespace TLSharp.Core.MTProto
 			for (int messages_index = 0; messages_index < messages_len; messages_index++)
 			{
 				GeoChatMessage messages_element;
-				messages_element = TL.Parse<GeoChatMessage>(reader);
+				messages_element = Tl.Parse<GeoChatMessage>(reader);
 				this.messages.Add(messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -10060,7 +10060,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -10069,7 +10069,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -10138,7 +10138,7 @@ namespace TLSharp.Core.MTProto
 			for (int messages_index = 0; messages_index < messages_len; messages_index++)
 			{
 				GeoChatMessage messages_element;
-				messages_element = TL.Parse<GeoChatMessage>(reader);
+				messages_element = Tl.Parse<GeoChatMessage>(reader);
 				this.messages.Add(messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -10147,7 +10147,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -10156,7 +10156,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -10228,7 +10228,7 @@ namespace TLSharp.Core.MTProto
 			for (int messages_index = 0; messages_index < messages_len; messages_index++)
 			{
 				GeoChatMessage messages_element;
-				messages_element = TL.Parse<GeoChatMessage>(reader);
+				messages_element = Tl.Parse<GeoChatMessage>(reader);
 				this.messages.Add(messages_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -10237,7 +10237,7 @@ namespace TLSharp.Core.MTProto
 			for (int chats_index = 0; chats_index < chats_len; chats_index++)
 			{
 				Chat chats_element;
-				chats_element = TL.Parse<Chat>(reader);
+				chats_element = Tl.Parse<Chat>(reader);
 				this.chats.Add(chats_element);
 			}
 			reader.ReadInt32(); // vector code
@@ -10246,7 +10246,7 @@ namespace TLSharp.Core.MTProto
 			for (int users_index = 0; users_index < users_len; users_index++)
 			{
 				User users_element;
-				users_element = TL.Parse<User>(reader);
+				users_element = Tl.Parse<User>(reader);
 				this.users.Add(users_element);
 			}
 		}
@@ -10360,7 +10360,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.message = TL.Parse<GeoChatMessage>(reader);
+			this.message = Tl.Parse<GeoChatMessage>(reader);
 		}
 
 		public override string ToString()
@@ -10451,7 +10451,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.message = TL.Parse<EncryptedMessage>(reader);
+			this.message = Tl.Parse<EncryptedMessage>(reader);
 			this.qts = reader.ReadInt32();
 		}
 
@@ -10531,7 +10531,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.chat = TL.Parse<EncryptedChat>(reader);
+			this.chat = Tl.Parse<EncryptedChat>(reader);
 			this.date = reader.ReadInt32();
 		}
 
@@ -11194,7 +11194,7 @@ namespace TLSharp.Core.MTProto
 			this.chat_id = reader.ReadInt32();
 			this.date = reader.ReadInt32();
 			this.bytes = Serializers.Bytes.read(reader);
-			this.file = TL.Parse<EncryptedFile>(reader);
+			this.file = Tl.Parse<EncryptedFile>(reader);
 		}
 
 		public override string ToString()
@@ -11288,7 +11288,7 @@ namespace TLSharp.Core.MTProto
 		public override void Read(BinaryReader reader)
 		{
 			this.layer = reader.ReadInt32();
-			this.message = TL.Parse<DecryptedMessage>(reader);
+			this.message = Tl.Parse<DecryptedMessage>(reader);
 		}
 
 		public override string ToString()
@@ -11338,7 +11338,7 @@ namespace TLSharp.Core.MTProto
 			this.random_id = reader.ReadInt64();
 			this.random_bytes = Serializers.Bytes.read(reader);
 			this.message = Serializers.String.read(reader);
-			this.media = TL.Parse<DecryptedMessageMedia>(reader);
+			this.media = Tl.Parse<DecryptedMessageMedia>(reader);
 		}
 
 		public override string ToString()
@@ -11385,7 +11385,7 @@ namespace TLSharp.Core.MTProto
 		{
 			this.random_id = reader.ReadInt64();
 			this.random_bytes = Serializers.Bytes.read(reader);
-			this.action = TL.Parse<DecryptedMessageAction>(reader);
+			this.action = Tl.Parse<DecryptedMessageAction>(reader);
 		}
 
 		public override string ToString()
@@ -11862,7 +11862,7 @@ namespace TLSharp.Core.MTProto
 		public override void Read(BinaryReader reader)
 		{
 			this.date = reader.ReadInt32();
-			this.file = TL.Parse<EncryptedFile>(reader);
+			this.file = Tl.Parse<EncryptedFile>(reader);
 		}
 
 		public override string ToString()
@@ -12101,7 +12101,7 @@ namespace TLSharp.Core.MTProto
 			for (int dc_options_index = 0; dc_options_index < dc_options_len; dc_options_index++)
 			{
 				DcOption dc_options_element;
-				dc_options_element = TL.Parse<DcOption>(reader);
+				dc_options_element = Tl.Parse<DcOption>(reader);
 				this.dc_options.Add(dc_options_element);
 			}
 		}
@@ -12144,7 +12144,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.file = TL.Parse<InputFile>(reader);
+			this.file = Tl.Parse<InputFile>(reader);
 			this.duration = reader.ReadInt32();
 		}
 
@@ -12183,7 +12183,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.id = TL.Parse<InputAudio>(reader);
+			this.id = Tl.Parse<InputAudio>(reader);
 		}
 
 		public override string ToString()
@@ -12227,7 +12227,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.file = TL.Parse<InputFile>(reader);
+			this.file = Tl.Parse<InputFile>(reader);
 			this.file_name = Serializers.String.read(reader);
 			this.mime_type = Serializers.String.read(reader);
 		}
@@ -12277,8 +12277,8 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.file = TL.Parse<InputFile>(reader);
-			this.thumb = TL.Parse<InputFile>(reader);
+			this.file = Tl.Parse<InputFile>(reader);
+			this.thumb = Tl.Parse<InputFile>(reader);
 			this.file_name = Serializers.String.read(reader);
 			this.mime_type = Serializers.String.read(reader);
 		}
@@ -12319,7 +12319,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.id = TL.Parse<InputDocument>(reader);
+			this.id = Tl.Parse<InputDocument>(reader);
 		}
 
 		public override string ToString()
@@ -12357,7 +12357,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.document = TL.Parse<Document>(reader);
+			this.document = Tl.Parse<Document>(reader);
 		}
 
 		public override string ToString()
@@ -12395,7 +12395,7 @@ namespace TLSharp.Core.MTProto
 
 		public override void Read(BinaryReader reader)
 		{
-			this.audio = TL.Parse<Audio>(reader);
+			this.audio = Tl.Parse<Audio>(reader);
 		}
 
 		public override string ToString()
