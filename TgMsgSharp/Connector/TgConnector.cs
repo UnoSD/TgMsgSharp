@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -113,10 +112,10 @@ namespace TgMsgSharp.Connector
 
             var messagesProcessor = new MessagesProcessor(_client, contactId);
 
-            while (await messagesProcessor.GetMessagesAvailable())
-            {
-                var messages = await messagesProcessor.GetMessages();
+            IReadOnlyCollection<Message> messages;
 
+            while ((messages = await messagesProcessor.GetMessages()).Any())
+            {
                 var tgMessages = MapMessages(messages);
 
                 foreach(var tgMessage in tgMessages)

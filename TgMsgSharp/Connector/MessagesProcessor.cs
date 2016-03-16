@@ -34,22 +34,6 @@ namespace TgMsgSharp.Connector
             _processingOffsets = new ConcurrentBag<int>();
         }
 
-        public async Task<bool> GetMessagesAvailable()
-        {
-            IReadOnlyCollection<Message> messages = null;
-            var attempt = 0;
-
-            do
-                messages = await GetMessages(_offset, 1);
-            while (messages == null && attempt++ <= MaximumAttempts);
-
-            if (messages != null) return messages.Any();
-
-            _logger.Error($"Cannot retrieve messages after {attempt} attempt. Offset: {_offset}");
-
-            return false;
-        }
-
         public async Task<IReadOnlyCollection<Message>> GetMessages()
         {
             IReadOnlyCollection<Message> messages = null;
