@@ -16,6 +16,7 @@ namespace TLSharp.Core.Network
 {
     public partial class MtProtoSender
     {
+        const int Gzip = 0x3072cfa1;
         //private ulong sessionId = GenerateRandomUlong();
 
         private TcpTransport _transport;
@@ -191,7 +192,7 @@ namespace TLSharp.Core.Network
                 case 0xf35c6d01: // rpc_result
                                  //logger.debug("MSG rpc_result");
                     return HandleRpcResult(messageId, sequence, messageReader, request);
-                case 0x3072cfa1: // gzip_packed
+                case Gzip: // gzip_packed
                                  //logger.debug("MSG gzip_packed");
                     return HandleGzipPacked(messageId, sequence, messageReader, request);
                 case 0xe317af7e:
@@ -265,71 +266,18 @@ namespace TLSharp.Core.Network
 			}
 			*/
 
-            uint innerCode = messageReader.ReadUInt32();
-            if (innerCode == 0x2144ca19)
-            { // rpc_error
-                int errorCode = messageReader.ReadInt32();
-                string errorMessage = Serializers.String.read(messageReader);
+            var combinator = new Combinator(messageReader.ReadUInt32());
 
-                if (errorMessage.StartsWith("FLOOD_WAIT_"))
-                {
-                    var resultString = Regex.Match(errorMessage, @"\d+").Value;
-                    var seconds = int.Parse(resultString);
-                    Debug.WriteLine($"Should wait {seconds} sec.");
-                    Thread.Sleep(1000 * seconds);
-                }
-                else if (errorMessage.StartsWith("PHONE_MIGRATE_"))
-                {
-                    var resultString = Regex.Match(errorMessage, @"\d+").Value;
-                    var dcIdx = int.Parse(resultString);
-                    var exception = new InvalidOperationException($"Your phone number registered to {dcIdx} dc. Please update settings. See https://github.com/sochix/TLSharp#i-get-an-error-migrate_x for details.");
-                    exception.Data.Add("dcId", dcIdx);
-                    throw exception;
-                }
-                else
-                {
-                    throw new InvalidOperationException(errorMessage);
-                }
 
-            }
-            else if (innerCode == 0x3072cfa1)
+            if (combinator.Name == 0x2144ca19)
             {
-                try
-                {
-                    // gzip_packed
-                    var packedData = Serializers.Bytes.read(messageReader);
-                    using (var packedStream = new MemoryStream(packedData, false))
-                    {
-                        var zipStream = new GZipStream(packedStream, CompressionMode.Decompress);
-
-                        var compressedReader = new BinaryReader(zipStream);
-
-                        request.OnResponse(compressedReader);
-
-
-                        // Read to end TODO : measure time taken with exception and without.
-                        const int bufferSize = 4096;
-                        using (var ms = new MemoryStream())
-                        {
-                            var buffer = new byte[bufferSize];
-                            int count;
-                            while ((count = compressedReader.Read(buffer, 0, buffer.Length)) != 0)
-                                ms.Write(buffer, 0, count);
-                        }
-                        // read to end
-
-                        //Disposing the binaryreader dispose also: zipStream.Dispose() (Calls Close()); so we get the error before.
-                        //Exception thrown: 'Ionic.Zlib.ZlibException' in Ionic.ZLib.dll
-                        //Additional information: Bad CRC32 in GZIP trailer. (actual(8125C157) != expected(6B1145BF))
-                        compressedReader.Dispose();
-
-                        zipStream.Dispose();
-                    }
-                }
-                catch (ZlibException ex)
-                {
-
-                }
+                // rpc_error
+                ParseError(messageReader);
+            }
+            else if (combinator.Name == Gzip)
+            {
+                // gzip_packed
+                ProcessGzip(messageReader, request);
             }
             else
             {
@@ -339,6 +287,66 @@ namespace TLSharp.Core.Network
             }
 
             return false;
+        }
+
+        static void ProcessGzip(BinaryReader messageReader, MTProtoRequest request)
+        {
+            var packedData = Serializers.Bytes.read(messageReader);
+            using (var packedStream = new MemoryStream(packedData, false))
+            {
+                var zipStream = new GZipStream(packedStream, CompressionMode.Decompress);
+
+                var compressedReader = new BinaryReader(zipStream);
+
+                request.OnResponse(compressedReader);
+
+
+                // Read to end TODO : measure time taken with exception and without.
+                const int bufferSize = 4096;
+                using (var ms = new MemoryStream())
+                {
+                    var buffer = new byte[bufferSize];
+                    int count;
+                    while ((count = compressedReader.Read(buffer, 0, buffer.Length)) != 0)
+                        ms.Write(buffer, 0, count);
+                }
+                // read to end
+
+                //Disposing the binaryreader dispose also: zipStream.Dispose() (Calls Close()); so we get the error before.
+                //Exception thrown: 'Ionic.Zlib.ZlibException' in Ionic.ZLib.dll
+                //Additional information: Bad CRC32 in GZIP trailer. (actual(8125C157) != expected(6B1145BF))
+                compressedReader.Dispose();
+
+                zipStream.Dispose();
+            }
+        }
+
+        static void ParseError(BinaryReader messageReader)
+        {
+            int errorCode = messageReader.ReadInt32();
+            string errorMessage = Serializers.String.read(messageReader);
+
+            if (errorMessage.StartsWith("FLOOD_WAIT_"))
+            {
+                var resultString = Regex.Match(errorMessage, @"\d+").Value;
+                var seconds = int.Parse(resultString);
+                Debug.WriteLine($"Should wait {seconds} sec.");
+                Thread.Sleep(1000*seconds);
+            }
+            else if (errorMessage.StartsWith("PHONE_MIGRATE_"))
+            {
+                var resultString = Regex.Match(errorMessage, @"\d+").Value;
+                var dcIdx = int.Parse(resultString);
+                var exception =
+                    new InvalidOperationException(
+                        $"Your phone number registered to {dcIdx} dc. Please update settings. See https://github.com/sochix/TLSharp#i-get-an-error-migrate_x for details.");
+                exception.Data.Add("dcId", dcIdx);
+                throw exception;
+            }
+            else
+            {
+                throw new InvalidOperationException(errorMessage);
+            }
         }
 
         private bool HandleMsgDetailedInfo(ulong messageId, int sequence, BinaryReader messageReader)
