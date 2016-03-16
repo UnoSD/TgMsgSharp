@@ -1,3 +1,3 @@
 # TgMsgSharp
 
-Library used: TLSHarp - https://github.com/sochix/TLSharp
+Library used: TLSharp - https://github.com/sochix/TLSharp

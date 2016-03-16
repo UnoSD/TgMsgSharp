@@ -16,6 +16,7 @@ namespace TgMsgSharp.Connector
     {
         public event EventHandler<ConnectorStatus> StatusChanged;
 
+        readonly Lazy<IReadOnlyCollection<TgContact>> _cachedContacts;
         readonly TgFileSettingsProvider _settingsProvider;
         readonly UserMapper _usersMapper;
         readonly TelegramClient _client;
@@ -51,6 +52,7 @@ namespace TgMsgSharp.Connector
             _usersMapper = new UserMapper();
             _contactsCache = new Dictionary<string, int>();
             _settingsProvider = new TgFileSettingsProvider(new FileInfo(settingsFilePath));
+            _cachedContacts = new Lazy<IReadOnlyCollection<TgContact>>(() => GetContacts().Result);
         }
 
         public async Task<ConnectorStatus> Connect()
@@ -180,7 +182,7 @@ namespace TgMsgSharp.Connector
         {
             var tgSettings = _settingsProvider.GetSettings();
 
-            var singleOrDefault = tgSettings.Contacts.SingleOrDefault(contact => contact.Id == userId);
+            var singleOrDefault = this.GetCachedContacts().SingleOrDefault(contact => contact.Id == userId);
             
             return singleOrDefault?.FirstName ?? userId.ToString();
         }
@@ -222,5 +224,7 @@ namespace TgMsgSharp.Connector
 
             return _usersMapper.Map(userContactConstructors).ToArray();
         }
+
+        public IReadOnlyCollection<TgContact> GetCachedContacts() => _cachedContacts.Value;
     }
 }
