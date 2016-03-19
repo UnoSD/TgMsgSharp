@@ -2,8 +2,14 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="TgMsgSharp.Launcher.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="TgSettingsPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">..\..\..\..\TODO\AppData.csv</Value>
+    <Setting Name="ApiId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="ApiHash" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Api hash here</Value>
+    </Setting>
+    <Setting Name="PhoneNumber" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Phone number here</Value>
     </Setting>
   </Settings>
 </SettingsFile>

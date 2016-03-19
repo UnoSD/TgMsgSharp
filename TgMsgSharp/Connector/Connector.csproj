@@ -51,7 +51,6 @@
     <Compile Include="ConnectorStatus.cs" />
     <Compile Include="IMapper.cs" />
     <Compile Include="IMessageMediaHandler.cs" />
-    <Compile Include="ITgSettingsProvider.cs" />
     <Compile Include="LogDispatcher.cs" />
     <Compile Include="LogMessageEventArgs.cs" />
     <Compile Include="MediaHandlersFactory.cs" />
@@ -62,14 +61,12 @@
     <Compile Include="ParallelMessagesProcessor.cs" />
     <Compile Include="TgContact.cs" />
     <Compile Include="TgDateConverter.cs" />
-    <Compile Include="TgFileSettingsProvider.cs" />
     <Compile Include="TgImage.cs" />
     <Compile Include="TgLocation.cs" />
     <Compile Include="TgMedia.cs" />
     <Compile Include="TgMessage.cs" />
     <Compile Include="TgConnector.cs" />
     <Compile Include="SerializedSingleSessionStore.cs" />
-    <Compile Include="TgSettings.cs" />
     <Compile Include="TlParser.cs" />
     <Compile Include="UserMapper.cs" />
   </ItemGroup>

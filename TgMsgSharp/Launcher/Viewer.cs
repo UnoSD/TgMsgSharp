@@ -17,13 +17,12 @@ namespace TgMsgSharp.Launcher
         const string SurnameColumn = "Surname";
 
         readonly Lazy<TgConnector> _tgConnector;
-        readonly Lazy<SettingsSaver> _tgSettingsSaver;
 
         IReadOnlyCollection<TgMessage> _messages;
 
         TgConnector CreateConnector()
         {
-            var tgConnector = new TgConnector(txtNumber.Text, int.Parse(txtAppId.Text), txtAppHash.Text);
+            var tgConnector = new TgConnector(txtNumber.Text, Convert.ToInt32(nudAppId.Value), txtAppHash.Text);
 
             tgConnector.StatusChanged += (_, status) => UpdateStatus(status);
 
@@ -35,7 +34,6 @@ namespace TgMsgSharp.Launcher
             InitializeComponent();
 
             _tgConnector = new Lazy<TgConnector>(CreateConnector);
-            _tgSettingsSaver = new Lazy<SettingsSaver>();
 
             LogDispatcher.MessageLogged += LogDispatcherOnMessageLogged;
         }
@@ -65,17 +63,11 @@ namespace TgMsgSharp.Launcher
             }));
         }
 
-        void PopulateSettings(ITgSettingsProvider settingsProvider)
+        void PopulateSettings()
         {
-            var settings = settingsProvider.GetSettings();
-
-            if (settings == null) return;
-
-            txtNumber.Text = settings.Number;
-            txtAppId.Text = settings.AppId.ToString();
-            txtAppHash.Text = settings.AppHash;
-
-            PopulateContacts(settings.Contacts);
+            txtNumber.Text = Settings.Default.PhoneNumber;
+            nudAppId.Value = Settings.Default.ApiId;
+            txtAppHash.Text = Settings.Default.ApiHash;
         }
 
         void PopulateContacts(IEnumerable<TgContact> contacts)
@@ -160,11 +152,7 @@ namespace TgMsgSharp.Launcher
 
         void Viewer_Load(object sender, EventArgs e)
         {
-            var tgSettingsPath = Settings.Default.TgSettingsPath;
-
-            txtSettingsFile.Text = tgSettingsPath;
-
-            PopulateSettings(new TgFileSettingsProvider(new FileInfo(tgSettingsPath)));
+            PopulateSettings();
 
             UpdateStatus(ConnectorStatus.NotConnected);
         }
@@ -174,8 +162,7 @@ namespace TgMsgSharp.Launcher
             foreach (var control in Controls.OfType<Control>())
                 control.Enabled = false;
 
-            txtSettingsFile.Enabled = true;
-            btnBrowse.Enabled = true;
+            nudAppId.Enabled = true;
             btnLoad.Enabled = true;
             btnSave.Enabled = true;
             lvwLog.Enabled = true;
@@ -200,7 +187,7 @@ namespace TgMsgSharp.Launcher
                 case ConnectorStatus.ClientError:
                     break;
                 case ConnectorStatus.NotConnected:
-                    txtAppId.Enabled = true;
+                    nudAppId.Enabled = true;
                     txtAppHash.Enabled = true;
                     txtNumber.Enabled = true;
                     btnConnect.Enabled = true;
@@ -228,11 +215,6 @@ namespace TgMsgSharp.Launcher
 
         int GetColumnIndex(string columnName) => lvwContacts.Columns.OfType<ColumnHeader>().Single(header => header.Text == columnName).Index;
 
-        void btnBrowse_Click(object sender, EventArgs e)
-        {
-            txtSettingsFile.Text = GetSaveFile();
-        }
-
         static string GetSaveFile()
         {
             var saveFileDialog = new SaveFileDialog();
@@ -244,40 +226,31 @@ namespace TgMsgSharp.Launcher
 
         void btnLoad_Click(object sender, EventArgs e)
         {
-            var tgFileSettingsProvider = new TgFileSettingsProvider(new FileInfo(txtSettingsFile.Text));
+            Settings.Default.Reload();
 
-            PopulateSettings(tgFileSettingsProvider);
+            PopulateSettings();
         }
 
         void btnSave_Click(object sender, EventArgs e)
         {
-            Func<ListViewItem, TgContact> selector = item => new TgContact
-            {
-                Number = item.SubItems[GetColumnIndex(NumberColumn)].Text,
-                FirstName = item.SubItems[GetColumnIndex(NameColumn)].Text,
-                LastName = item.SubItems[GetColumnIndex(SurnameColumn)].Text
-            };
+            //Func<ListViewItem, TgContact> selector = item => new TgContact
+            //{
+            //    Number = item.SubItems[GetColumnIndex(NumberColumn)].Text,
+            //    FirstName = item.SubItems[GetColumnIndex(NameColumn)].Text,
+            //    LastName = item.SubItems[GetColumnIndex(SurnameColumn)].Text
+            //};
 
-            var contacts = lvwContacts.Items.OfType<ListViewItem>().Select(selector).ToList();
+            //var contacts = lvwContacts.Items.OfType<ListViewItem>().Select(selector).ToList();
 
-            var tgSettings = new TgSettings
-            {
-                AppId = int.Parse(txtAppId.Text),
-                AppHash = txtAppHash.Text,
-                Number = txtNumber.Text,
-                Contacts = contacts
-            };
+            Settings.Default.ApiId = Convert.ToInt32(nudAppId.Value);
+            Settings.Default.ApiHash = txtAppHash.Text;
+            Settings.Default.PhoneNumber = txtNumber.Text;
 
-            _tgSettingsSaver.Value.Save(tgSettings, new FileInfo(txtSettingsFile.Text));
+            // TODO: Save contacts: Contacts = contacts
+            
+            Settings.Default.Save();
 
             MessageBox.Show("Saved!");
-        }
-
-        void txtSettingsFile_TextChanged(object sender, EventArgs e)
-        {
-            Settings.Default.TgSettingsPath = txtSettingsFile.Text;
-
-            Settings.Default.Save();
         }
 
         void btnExport_Click(object sender, EventArgs e)
@@ -344,6 +317,12 @@ namespace TgMsgSharp.Launcher
 
             if(dialogResult == DialogResult.OK)
                 _tgConnector.Value.DownloadImages(_messages, folderBrowserDialog.SelectedPath);
+        }
+
+        void nudAppId_ValueChanged(object sender, EventArgs eventArgs)
+        {
+            if (nudAppId.Value%1 != 0)
+                nudAppId.Value = Math.Truncate(nudAppId.Value);
         }
     }
 }

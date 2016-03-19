@@ -35,7 +35,6 @@
             this.txtDownload = new System.Windows.Forms.Button();
             this.txtNumber = new System.Windows.Forms.TextBox();
             this.txtAppHash = new System.Windows.Forms.TextBox();
-            this.txtAppId = new System.Windows.Forms.TextBox();
             this.dgvData = new System.Windows.Forms.DataGridView();
             this.lvwContacts = new System.Windows.Forms.ListView();
             this.chrName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -44,15 +43,16 @@
             this.lblGetMessages = new System.Windows.Forms.Label();
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.txtSettingsFile = new System.Windows.Forms.TextBox();
-            this.btnBrowse = new System.Windows.Forms.Button();
             this.lvwLog = new System.Windows.Forms.ListView();
             this.chrDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chrLevel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chrMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnExport = new System.Windows.Forms.Button();
             this.btnDownloadImages = new System.Windows.Forms.Button();
+            this.nudAppId = new System.Windows.Forms.NumericUpDown();
+            this.pgbProgress = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAppId)).BeginInit();
             this.SuspendLayout();
             // 
             // btnConnect
@@ -124,15 +124,6 @@
             this.txtAppHash.TabIndex = 1;
             this.txtAppHash.Text = "AppHash";
             // 
-            // txtAppId
-            // 
-            this.txtAppId.Enabled = false;
-            this.txtAppId.Location = new System.Drawing.Point(12, 41);
-            this.txtAppId.Name = "txtAppId";
-            this.txtAppId.Size = new System.Drawing.Size(100, 20);
-            this.txtAppId.TabIndex = 1;
-            this.txtAppId.Text = "AppId";
-            // 
             // dgvData
             // 
             this.dgvData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -201,24 +192,6 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // txtSettingsFile
-            // 
-            this.txtSettingsFile.Location = new System.Drawing.Point(14, 13);
-            this.txtSettingsFile.Name = "txtSettingsFile";
-            this.txtSettingsFile.Size = new System.Drawing.Size(122, 20);
-            this.txtSettingsFile.TabIndex = 7;
-            this.txtSettingsFile.TextChanged += new System.EventHandler(this.txtSettingsFile_TextChanged);
-            // 
-            // btnBrowse
-            // 
-            this.btnBrowse.Location = new System.Drawing.Point(142, 11);
-            this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(27, 23);
-            this.btnBrowse.TabIndex = 8;
-            this.btnBrowse.Text = "...";
-            this.btnBrowse.UseVisualStyleBackColor = true;
-            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
-            // 
             // lvwLog
             // 
             this.lvwLog.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -271,33 +244,57 @@
             this.btnDownloadImages.UseVisualStyleBackColor = true;
             this.btnDownloadImages.Click += new System.EventHandler(this.btnDownloadImages_Click);
             // 
+            // nudAppId
+            // 
+            this.nudAppId.Location = new System.Drawing.Point(12, 41);
+            this.nudAppId.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.nudAppId.Name = "nudAppId";
+            this.nudAppId.Size = new System.Drawing.Size(100, 20);
+            this.nudAppId.TabIndex = 11;
+            this.nudAppId.ValueChanged += new System.EventHandler(this.nudAppId_ValueChanged);
+            // 
+            // pgbProgress
+            // 
+            this.pgbProgress.BackColor = System.Drawing.Color.Black;
+            this.pgbProgress.ForeColor = System.Drawing.Color.DarkOrange;
+            this.pgbProgress.Location = new System.Drawing.Point(12, 11);
+            this.pgbProgress.MarqueeAnimationSpeed = 0;
+            this.pgbProgress.Name = "pgbProgress";
+            this.pgbProgress.Size = new System.Drawing.Size(157, 23);
+            this.pgbProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.pgbProgress.TabIndex = 12;
+            // 
             // Viewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1179, 450);
+            this.Controls.Add(this.pgbProgress);
             this.Controls.Add(this.btnDownloadImages);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.lvwLog);
-            this.Controls.Add(this.btnBrowse);
-            this.Controls.Add(this.txtSettingsFile);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.lblGetMessages);
             this.Controls.Add(this.lvwContacts);
             this.Controls.Add(this.dgvData);
             this.Controls.Add(this.txtRecipient);
-            this.Controls.Add(this.txtAppId);
             this.Controls.Add(this.txtAppHash);
             this.Controls.Add(this.txtNumber);
             this.Controls.Add(this.txtCode);
             this.Controls.Add(this.txtDownload);
             this.Controls.Add(this.btnAuth);
             this.Controls.Add(this.btnConnect);
+            this.Controls.Add(this.nudAppId);
             this.Name = "Viewer";
             this.Text = "TgMsgSharp";
             this.Load += new System.EventHandler(this.Viewer_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAppId)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -312,7 +309,6 @@
         private System.Windows.Forms.Button txtDownload;
         private System.Windows.Forms.TextBox txtNumber;
         private System.Windows.Forms.TextBox txtAppHash;
-        private System.Windows.Forms.TextBox txtAppId;
         private System.Windows.Forms.DataGridView dgvData;
         private System.Windows.Forms.ListView lvwContacts;
         private System.Windows.Forms.ColumnHeader chrName;
@@ -321,14 +317,14 @@
         private System.Windows.Forms.Label lblGetMessages;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.TextBox txtSettingsFile;
-        private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.ListView lvwLog;
         private System.Windows.Forms.ColumnHeader chrLevel;
         private System.Windows.Forms.ColumnHeader chrMessage;
         private System.Windows.Forms.ColumnHeader chrDate;
         private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.Button btnDownloadImages;
+        private System.Windows.Forms.NumericUpDown nudAppId;
+        private System.Windows.Forms.ProgressBar pgbProgress;
     }
 }
 

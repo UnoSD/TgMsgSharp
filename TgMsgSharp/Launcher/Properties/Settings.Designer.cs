@@ -25,13 +25,37 @@ namespace TgMsgSharp.Launcher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("..\\..\\..\\..\\TODO\\AppData.csv")]
-        public string TgSettingsPath {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ApiId {
             get {
-                return ((string)(this["TgSettingsPath"]));
+                return ((int)(this["ApiId"]));
             }
             set {
-                this["TgSettingsPath"] = value;
+                this["ApiId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Api hash here")]
+        public string ApiHash {
+            get {
+                return ((string)(this["ApiHash"]));
+            }
+            set {
+                this["ApiHash"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Phone number here")]
+        public string PhoneNumber {
+            get {
+                return ((string)(this["PhoneNumber"]));
+            }
+            set {
+                this["PhoneNumber"] = value;
             }
         }
     }
