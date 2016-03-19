@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using NLog;
 using TgMsgSharp.Launcher;
 using TLSharp.Core;
 using TLSharp.Core.MTProto;
@@ -13,7 +14,7 @@ namespace TgMsgSharp.Connector
     {
         public event EventHandler<ConnectorStatus> StatusChanged;
 
-        readonly Lazy<IReadOnlyCollection<TgContact>> _cachedContacts;
+        readonly Lazy<List<TgContact>> _cachedContacts;
         readonly UserMapper _usersMapper;
         readonly TelegramClient _client;
         readonly string _number;
@@ -22,7 +23,9 @@ namespace TgMsgSharp.Connector
         string _hash;
 
         ConnectorStatus _status = ConnectorStatus.NotConnected;
-        
+        readonly MediaHandlersFactory _mediaHandlersFactory;
+        readonly Logger _logger;
+
         public ConnectorStatus Status
         {
             get
@@ -43,10 +46,12 @@ namespace TgMsgSharp.Connector
             Tl.CreateCombinatorsLookupCache();
 
             _number = number;
+            _logger = LogManager.GetCurrentClassLogger();
             //var sessionStore = new SerializedSingleSessionStore(number, sessionData);
             _client = new TelegramClient(new FileSessionStore(), number, apiId, apiHash);
             _usersMapper = new UserMapper();
-            _cachedContacts = new Lazy<IReadOnlyCollection<TgContact>>(() => Task.Run(GetContacts).Result);
+            _cachedContacts = new Lazy<List<TgContact>>(() => Task.Run(GetContacts).Result);
+            _mediaHandlersFactory = new MediaHandlersFactory();
         }
 
         public async Task<ConnectorStatus> Connect()
@@ -84,7 +89,13 @@ namespace TgMsgSharp.Connector
 
             if (_user == null) return ConnectorStatus.ClientError;
 
-            // Is it myself in the contact list?
+            _cachedContacts.Value.Add(new TgContact
+            {
+                Id = _user.id,
+                FirstName = _user.first_name,
+                LastName = _user.last_name,
+                Number = _user.phone
+            });
 
             return ConnectorStatus.Connected;
         }
@@ -106,7 +117,7 @@ namespace TgMsgSharp.Connector
 
             var messagesProcessor = new MessagesProcessor(_client, contactId);
 
-            for(var messages = await messagesProcessor.GetMessages(); messages.Any(); messages = await messagesProcessor.GetMessages())
+            for (var messages = await messagesProcessor.GetMessages(); messages.Any(); messages = await messagesProcessor.GetMessages())
             {
                 var tgMessages = MapMessages(messages);
 
@@ -118,40 +129,39 @@ namespace TgMsgSharp.Connector
 
         IEnumerable<TgMessage> MapMessages(IEnumerable<Message> messages)
         {
-            return messages.OfType<MessageConstructor>().Select(message =>
-            {
-                var contentType = GetContentType(message.Media);
-
-                return new TgMessage
-                {
-                    Flags = message.Flags.ToString(),
-                    Sender = GetSender(message.FromId),
-                    Receiver = GetReceiver(message.ToId),
-                    Id = message.Id,
-                    Date = TgDateConverter.GetDateTime(message.Date),
-                    SmallImage = contentType.Item2,
-                    Text = message.Message,
-                    ContentType = contentType.Item1,
-                    Unread = message.Unread,
-                    Output = message.Output
-                };
-            });
+            return messages.OfType<MessageConstructor>()
+                           .AsParallel()
+                           .Select(MapMessage);
         }
 
-        static Tuple<string, Image> GetContentType(MessageMedia media)
+        TgMessage MapMessage(MessageConstructor message)
         {
-            if (media is MessageMediaEmptyConstructor) return new Tuple<string, Image>(media.ToString(), null);
+            var handler = _mediaHandlersFactory.GetMediaHandler(message.Media.GetType());
+            
+            var tgMedia = handler?.Map(message.Media);
+            
+            //var image = (Bitmap)new ImageConverter().ConvertFrom(cachedPhoto.bytes);
 
-            var photoMessage = media as MessageMediaPhotoConstructor;
+            var tgMessage = new TgMessage
+            {
+                Flags = message.Flags.ToString(),
+                Sender = GetSender(message.FromId),
+                Receiver = GetReceiver(message.ToId),
+                Id = message.Id,
+                Date = TgDateConverter.GetDateTime(message.Date),
+                Text = message.Message,
+                ContentType = handler?.TypeHandled.Name,
+                Unread = message.Unread,
+                Output = message.Output
+            };
 
-            var cachedPhoto = (photoMessage?.photo as PhotoConstructor)?.sizes?.OfType<PhotoCachedSizeConstructor>().FirstOrDefault();
 
-            Bitmap image = null;
+            if (handler == null)
+                _logger.Error($"Unable to find handler for media type: {message.Media.GetType()}");
+            
+            tgMessage.Media = tgMedia;
 
-            if (cachedPhoto != null)
-                image = (Bitmap) new ImageConverter().ConvertFrom(cachedPhoto.bytes);
-
-            return new Tuple<string, Image>(media.GetType().Name, image);
+            return tgMessage;
         }
 
         string GetSender(int sender) => GetUserFromId(sender);
@@ -160,7 +170,7 @@ namespace TgMsgSharp.Connector
         {
             var peerUserConstructor = receiver as PeerUserConstructor;
 
-            if(peerUserConstructor != null)
+            if (peerUserConstructor != null)
                 return GetUserFromId(peerUserConstructor.user_id);
 
             var peerChatConstructor = receiver as PeerChatConstructor;
@@ -171,7 +181,7 @@ namespace TgMsgSharp.Connector
         string GetUserFromId(int userId)
         {
             var singleOrDefault = this.GetCachedContacts().SingleOrDefault(contact => contact.Id == userId);
-            
+
             return singleOrDefault?.FirstName ?? userId.ToString();
         }
 
@@ -198,15 +208,83 @@ namespace TgMsgSharp.Connector
             }
         }
 
-        public async Task<IReadOnlyCollection<TgContact>> GetContacts()
+        public async Task<List<TgContact>> GetContacts()
         {
             var contacts = await _client.GetContacts();
 
             var userContactConstructors = contacts.Users.OfType<UserContactConstructor>();
 
-            return _usersMapper.Map(userContactConstructors).ToArray();
+            return _usersMapper.Map(userContactConstructors).ToList();
         }
 
         public IReadOnlyCollection<TgContact> GetCachedContacts() => _cachedContacts.Value;
+
+        public async void DownloadImages(IEnumerable<TgMessage> messages, string selectedPath)
+        {
+            if (!Directory.Exists(selectedPath))
+                return;
+
+            var tgMedias = messages.Where(message => message.Media != null).Select(message => message.Media);
+
+            foreach (var tgMedia in tgMedias)
+            {
+                var fileLocationConstructor = GetInputFileLocation(tgMedia.Location);
+
+                var uploadFile = await _client.GetFile(fileLocationConstructor);
+
+                var storageFileType = uploadFile.type;
+
+                var fileName = $"{tgMedia.Id}.{GetExtension(storageFileType)}";
+
+                var fullPath = Path.Combine(selectedPath, fileName);
+
+                File.WriteAllBytes(fullPath, uploadFile.bytes);
+
+                tgMedia.Path = Path.Combine("files", fileName); // Get relative to db file.
+            }
+        }
+
+        //public static string MakeRelative(string sourcePath, string referencePath)
+        //{
+        //    var sourceUri = new Uri(sourcePath);
+        //    var referenceUri = new Uri(referencePath);
+
+        //    return referenceUri.MakeRelativeUri(sourceUri).ToString();
+        //}
+
+        InputFileLocation GetInputFileLocation(TgLocation location)
+        {
+            switch (location.InputType.Name)
+            {
+                case nameof(InputAudioFileLocationConstructor):
+                    return new InputAudioFileLocationConstructor
+                    {
+                        id = location.Id,
+                        access_hash = location.AccessHash
+                    };
+                case nameof(InputFileLocationConstructor):
+                    return new InputFileLocationConstructor
+                    {
+                        volume_id = location.VolumeId,
+                        local_id = location.LocalId,
+                        secret = location.Secret
+                    };
+                default:
+                    throw new Exception();
+            }
+        }
+
+        static string GetExtension(storage_FileType storageFileType)
+        {
+            var typeName = storageFileType.GetType().Name;
+
+            typeName = typeName.Substring("Storage_file".Length);
+
+            typeName = typeName.Substring(0, typeName.Length - "Constructor".Length);
+
+            //if(typeName.ToLowerInvariant() == "partial" || typeName.ToLowerInvariant() == "unknown")
+
+            return typeName.ToLowerInvariant();
+        }
     }
 }

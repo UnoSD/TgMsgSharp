@@ -51,15 +51,18 @@ namespace TgMsgSharp.Launcher
 
             var date = DateTime.Now.ToString(CultureInfo.InvariantCulture);
 
-            var item = lvwLog.Items.Add
-                (
-                    new ListViewItem
+            lvwLog.BeginInvoke((Action)(() =>
+            {
+                var item = lvwLog.Items.Add
                     (
-                        new[] { date, logMessageEventArgs.Level, logMessageEventArgs.Message }
-                    )
-                );
+                        new ListViewItem
+                        (
+                            new[] { date, logMessageEventArgs.Level, logMessageEventArgs.Message }
+                        )
+                    );
 
-            lvwLog.EnsureVisible(item.Index);
+                lvwLog.EnsureVisible(item.Index);
+            }));
         }
 
         void PopulateSettings(ITgSettingsProvider settingsProvider)
@@ -177,6 +180,7 @@ namespace TgMsgSharp.Launcher
             btnSave.Enabled = true;
             lvwLog.Enabled = true;
             btnExport.Enabled = true;
+            btnDownloadImages.Enabled = true;
 
             switch (status)
             {
@@ -278,9 +282,21 @@ namespace TgMsgSharp.Launcher
 
         void btnExport_Click(object sender, EventArgs e)
         {
-            var exportFile = GetSaveFile();
+            var dialogResult = MessageBox.Show("Download attachments?", nameof(TgMsgSharp), MessageBoxButtons.YesNo);
 
-            if(exportFile == null) return;
+            if (dialogResult == DialogResult.Yes)
+                ExportWithImages();
+            else
+            {
+                var exportFile = GetSaveFile();
+
+                Export(exportFile);
+            }
+        }
+
+        void Export(string exportFile)
+        {
+            if (exportFile == null) return;
 
             var tgContext = new TgContext(new FileInfo(exportFile));
 
@@ -290,6 +306,44 @@ namespace TgMsgSharp.Launcher
             tgContext.SaveChanges();
 
             MessageBox.Show("Data saved.");
+        }
+
+        void ExportWithImages()
+        {
+            var folderBrowserDialog = new FolderBrowserDialog();
+
+            var dialogResult = folderBrowserDialog.ShowDialog();
+
+            if (dialogResult != DialogResult.OK) return;
+
+            var databaseFolderPath = Path.Combine(folderBrowserDialog.SelectedPath, GetExportFolderName());
+
+            var filesPath = Path.Combine(databaseFolderPath, "files");
+
+            Directory.CreateDirectory(filesPath);
+            
+            _tgConnector.Value.DownloadImages(_messages, filesPath);
+
+            Export(Path.Combine(databaseFolderPath, "database.sqlite"));
+        }
+
+        static string GetExportFolderName()
+        {
+            var cultureInfo = new CultureInfo("it-IT");
+
+            var folderDate = DateTime.Now.ToString("d-MMM-yyyy-HHmmss", cultureInfo);
+
+            return $"{folderDate}.TgMsgSharp";
+        }
+
+        void btnDownloadImages_Click(object sender, EventArgs e)
+        {
+            var folderBrowserDialog = new FolderBrowserDialog();
+
+            var dialogResult = folderBrowserDialog.ShowDialog();
+
+            if(dialogResult == DialogResult.OK)
+                _tgConnector.Value.DownloadImages(_messages, folderBrowserDialog.SelectedPath);
         }
     }
 }

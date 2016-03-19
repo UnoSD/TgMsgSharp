@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 
 namespace TgMsgSharp.Connector
 {
@@ -9,11 +8,11 @@ namespace TgMsgSharp.Connector
         public string Sender { get; set; }
         public string Receiver { get; set; }
         public DateTime Date { get; set; }
-        public Image SmallImage { get; set; }
         public string Text { get; set; }
         public bool Unread { get; set; }
         public int Id { get; set; }
         public string ContentType { get; set; }
         public string Flags { get; set; }
+        public TgMedia Media { get; set; }
     }
 }

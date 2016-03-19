@@ -252,5 +252,16 @@ namespace TLSharp.Core
 
             return response;
         }
+
+	    public async Task<Upload_fileConstructor> GetFile(InputFileLocation location)
+	    {
+	        var request = new GetFileRequest(location, 0, int.MaxValue);
+
+	        await _sender.Send(request);
+
+	        await _sender.Recieve(request);
+
+	        return new Upload_fileConstructor(request.type, request.mtime, request.bytes);
+	    }
 	}
 }

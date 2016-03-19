@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -26,7 +25,9 @@ namespace TLSharp.Core.Network
 
 			var tcpMessage = new TcpMessage(sendCounter, packet);
 
-			await _tcpClient.GetStream().WriteAsync(tcpMessage.Encode(), 0, tcpMessage.Encode().Length);
+		    var encodedMessage = tcpMessage.Encode();
+
+		    await _tcpClient.GetStream().WriteAsync(encodedMessage, 0, encodedMessage.Length);
 			sendCounter++;
 		}
         

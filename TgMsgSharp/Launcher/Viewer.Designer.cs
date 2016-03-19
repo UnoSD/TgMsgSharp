@@ -51,6 +51,7 @@
             this.chrLevel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chrMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnExport = new System.Windows.Forms.Button();
+            this.btnDownloadImages = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvData)).BeginInit();
             this.SuspendLayout();
             // 
@@ -238,7 +239,7 @@
             // chrDate
             // 
             this.chrDate.Text = "Date";
-            this.chrDate.Width = 78;
+            this.chrDate.Width = 155;
             // 
             // chrLevel
             // 
@@ -248,11 +249,11 @@
             // chrMessage
             // 
             this.chrMessage.Text = "Message";
-            this.chrMessage.Width = 864;
+            this.chrMessage.Width = 794;
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(1063, 284);
+            this.btnExport.Location = new System.Drawing.Point(1063, 313);
             this.btnExport.Name = "btnExport";
             this.btnExport.Size = new System.Drawing.Size(104, 23);
             this.btnExport.TabIndex = 10;
@@ -260,11 +261,22 @@
             this.btnExport.UseVisualStyleBackColor = true;
             this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
             // 
+            // btnDownloadImages
+            // 
+            this.btnDownloadImages.Location = new System.Drawing.Point(1063, 284);
+            this.btnDownloadImages.Name = "btnDownloadImages";
+            this.btnDownloadImages.Size = new System.Drawing.Size(104, 23);
+            this.btnDownloadImages.TabIndex = 10;
+            this.btnDownloadImages.Text = "Download images";
+            this.btnDownloadImages.UseVisualStyleBackColor = true;
+            this.btnDownloadImages.Click += new System.EventHandler(this.btnDownloadImages_Click);
+            // 
             // Viewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1179, 450);
+            this.Controls.Add(this.btnDownloadImages);
             this.Controls.Add(this.btnExport);
             this.Controls.Add(this.lvwLog);
             this.Controls.Add(this.btnBrowse);
@@ -316,6 +328,7 @@
         private System.Windows.Forms.ColumnHeader chrMessage;
         private System.Windows.Forms.ColumnHeader chrDate;
         private System.Windows.Forms.Button btnExport;
+        private System.Windows.Forms.Button btnDownloadImages;
     }
 }
 

@@ -35,7 +35,7 @@ namespace TLSharp.Core.Requests
             
             type = Tl.Parse<storage_FileType>(reader);
             mtime = reader.ReadInt32();
-            bytes = reader.ReadBytes(_limit);
+            bytes = Serializers.Bytes.read(reader); // reader.ReadBytes(_limit);
         }
 
         public override void OnException(Exception exception)

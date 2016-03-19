@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Data.SQLite;
 using System.IO;
 using SQLite.CodeFirst;
@@ -25,8 +27,23 @@ namespace Storage
 
         static void ApplyExclusions(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TgMessage>().Ignore(tgMessage => tgMessage.SmallImage);
+            //modelBuilder.Entity<TgMessage>().Ignore(tgMessage => tgMessage.SmallImage);
+            //modelBuilder.Entity<Type>().Map(DerivedTypeMapConfigurationAction);
+            //modelBuilder.Entity<TgLocation>().Property(location => location.InputType).
+            //modelBuilder.Entity<Type>().HasKey(type => type.FullName);
+            //modelBuilder.Entity<TgLocation>().Ignore(location => location.InputType);
+            //modelBuilder.Types<TgLocation>().Configure(configuration => configuration.Property(location => location.InputType.FullName).HasColumnName("Type"));
+
+            //modelBuilder.ComplexType<Type>().Property(type => type.FullName).HasColumnName("TypeName");
+            
+            //modelBuilder.Entity<TgLocation>().Map(configuration => configuration.Property(location => location.InputType).)
+            modelBuilder.Entity<TgLocation>().Ignore(location => location.InputType);
         }
+
+        //static void DerivedTypeMapConfigurationAction(EntityMappingConfiguration<Type> entityMappingConfiguration)
+        //{
+        //    entityMappingConfiguration.pr
+        //}
 
         static void ApplyIndexes(DbModelBuilder modelBuilder)
         {

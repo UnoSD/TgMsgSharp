@@ -36,7 +36,8 @@ namespace TgMsgSharp.Connector
 
         public async Task<IReadOnlyCollection<Message>> GetMessages()
         {
-            IReadOnlyCollection<Message> messages = null;
+            IReadOnlyCollection<Message> messages;
+
             var attempt = 0;
 
             var offset = GetNextUnprocessedOffset();
